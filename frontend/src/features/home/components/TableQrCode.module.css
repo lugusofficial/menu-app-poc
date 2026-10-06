@@ -1,0 +1,13 @@
+.frame {
+  display: block;
+  padding: var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.frame svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

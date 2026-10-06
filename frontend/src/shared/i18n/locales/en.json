@@ -1,0 +1,134 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "We could not load this. Tap to try again.",
+    "retry": "Try again",
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "add": "Add",
+    "remove": "Remove",
+    "language": "Language"
+  },
+  "home": {
+    "eyebrow": "Prototype",
+    "title": "Order and split the bill from your phone",
+    "subtitle": "Point your camera at the QR code on the table. The menu opens on that table, and at the end everyone pays for what they had.",
+    "demoTitle": "Demo tables",
+    "demoHint": "Scan one with your phone, or tap to open it here.",
+    "openTable": "Open {{label}}",
+    "seats_one": "{{count}} seat",
+    "seats_other": "{{count}} seats",
+    "qrAlt": "QR code for {{label}}",
+    "features": {
+      "scanTitle": "No app, no queue",
+      "scanBody": "The QR code opens the menu in the browser, already on the right table.",
+      "orderTitle": "Everyone orders together",
+      "orderBody": "Each person joins the table with their name and adds what they want.",
+      "splitTitle": "The bill splits itself",
+      "splitBody": "Evenly, by what each person had, or by amounts you choose. It always adds up to the cent."
+    }
+  },
+  "join": {
+    "title": "Welcome to {{venue}}",
+    "tableLabel": "You are at {{table}}",
+    "nameLabel": "What should we call you?",
+    "namePlaceholder": "Your first name",
+    "nameError": "Enter a name so we know which items are yours on the bill.",
+    "submit": "Join the table",
+    "alreadyHere": "Already at the table",
+    "continueAs": "Continue as {{name}}",
+    "switch": "I am someone else",
+    "notFound": "Table not found",
+    "notFoundBody": "This QR code does not match an open table. Please ask a member of staff."
+  },
+  "menu": {
+    "title": "Menu",
+    "searchLabel": "Search the menu",
+    "searchPlaceholder": "Search a dish or ingredient",
+    "empty": "Nothing matches that search.",
+    "unavailable": "Sold out",
+    "viewOrder": "View order",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "tags": {
+      "popular": "Most ordered",
+      "vegetarian": "Vegetarian",
+      "spicy": "Spicy",
+      "glutenFree": "Gluten free",
+      "new": "New"
+    }
+  },
+  "itemSheet": {
+    "notesLabel": "Anything to note?",
+    "notesPlaceholder": "e.g. no onion, medium rare",
+    "quantityLabel": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "addFor": "Add · {{total}}",
+    "addedToast": "{{name}} added to the order"
+  },
+  "order": {
+    "title": "Table order",
+    "empty": "The order is empty. Go back to the menu to start.",
+    "goToMenu": "See the menu",
+    "cartSection": "Not sent yet",
+    "placedSection": "In the kitchen",
+    "addedBy": "Ordered by {{name}}",
+    "subtotal": "Subtotal",
+    "serviceFee": "Service fee (10%)",
+    "total": "Total",
+    "place": "Send to the kitchen",
+    "placedToast": "Order sent to the kitchen",
+    "split": "Split the bill",
+    "removeLine": "Remove {{name}}"
+  },
+  "bill": {
+    "title": "Split the bill",
+    "empty": "There is nothing on the bill yet.",
+    "serviceFeeToggle": "Include the 10% service fee",
+    "modes": {
+      "equal": "Evenly",
+      "byItem": "By item",
+      "custom": "Free amounts"
+    },
+    "modeHint": {
+      "equal": "The whole bill divided by the number of people at the table.",
+      "byItem": "Tap who had each item. An item tapped by two people is split between them.",
+      "custom": "Each person types how much they will pay. We show what is still missing."
+    },
+    "assignHint": "Tap the names to say who had it",
+    "shared": "Split between {{count}}",
+    "unassignedWarning": "{{amount}} has nobody on it yet. Tap who had those items.",
+    "missingWarning": "{{amount}} is still missing to cover the bill.",
+    "overWarning": "The table has put in {{amount}} more than the total.",
+    "settled": "The bill adds up. You can go ahead and pay.",
+    "customLabel": "How much {{name}} will pay",
+    "suggest": "Split what is left evenly",
+    "markPaid": "Mark as paid",
+    "markUnpaid": "Undo payment",
+    "paid": "Paid",
+    "paidToast": "{{name}} marked as paid",
+    "ofWhichFee": "includes {{amount}} service fee",
+    "itemsOf": "{{name}}'s items",
+    "noItems": "No items tapped",
+    "summaryTitle": "Bill summary",
+    "sharesTitle": "Who pays what",
+    "itemsTitle": "Items on the bill"
+  },
+  "table": {
+    "menu": "Menu",
+    "order": "Order",
+    "bill": "Bill",
+    "you": "You",
+    "changeDiner": "Switch person",
+    "peopleAtTable_one": "{{count}} person at the table",
+    "peopleAtTable_other": "{{count}} people at the table"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This address does not exist, or the table has been closed.",
+    "home": "Go to the start"
+  }
+}

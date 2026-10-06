@@ -1,0 +1,41 @@
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.md {
+  width: 30px;
+  height: 30px;
+  font-size: 0.8125rem;
+}
+
+.sm {
+  width: 22px;
+  height: 22px;
+  font-size: 0.6875rem;
+}
+
+.toggle {
+  padding: 0.3rem 0.75rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.toggle:hover {
+  border-color: var(--ink-soft);
+}
+
+.toggleOn {
+  color: #fff;
+}

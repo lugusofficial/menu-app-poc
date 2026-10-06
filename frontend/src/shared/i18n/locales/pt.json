@@ -1,0 +1,134 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Não foi possível carregar. Toque para tentar de novo.",
+    "retry": "Tentar de novo",
+    "back": "Voltar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "add": "Adicionar",
+    "remove": "Remover",
+    "language": "Idioma"
+  },
+  "home": {
+    "eyebrow": "Protótipo",
+    "title": "Peça e divida a conta pelo celular",
+    "subtitle": "Aponte a câmera para o QR code da mesa. O cardápio abre direto na sua mesa e, no fim, cada um paga o que consumiu.",
+    "demoTitle": "Mesas de demonstração",
+    "demoHint": "Escaneie com o celular ou toque para abrir aqui mesmo.",
+    "openTable": "Abrir {{label}}",
+    "seats_one": "{{count}} lugar",
+    "seats_other": "{{count}} lugares",
+    "qrAlt": "QR code da {{label}}",
+    "features": {
+      "scanTitle": "Sem app, sem fila",
+      "scanBody": "O QR code abre o cardápio no navegador, já na mesa certa.",
+      "orderTitle": "Todo mundo pede junto",
+      "orderBody": "Cada pessoa entra na mesa com seu nome e adiciona o que quiser.",
+      "splitTitle": "A conta divide sozinha",
+      "splitBody": "Por igual, por item consumido ou em valores escolhidos. Sempre fecha no centavo."
+    }
+  },
+  "join": {
+    "title": "Bem-vindo à {{venue}}",
+    "tableLabel": "Você está na {{table}}",
+    "nameLabel": "Como podemos te chamar?",
+    "namePlaceholder": "Seu primeiro nome",
+    "nameError": "Escreva um nome para a gente saber o que é seu na conta.",
+    "submit": "Entrar na mesa",
+    "alreadyHere": "Já estão na mesa",
+    "continueAs": "Continuar como {{name}}",
+    "switch": "Sou outra pessoa",
+    "notFound": "Mesa não encontrada",
+    "notFoundBody": "Esse QR code não corresponde a nenhuma mesa aberta. Chame um atendente."
+  },
+  "menu": {
+    "title": "Cardápio",
+    "searchLabel": "Buscar no cardápio",
+    "searchPlaceholder": "Buscar prato ou ingrediente",
+    "empty": "Nada encontrado com esse termo.",
+    "unavailable": "Esgotado",
+    "viewOrder": "Ver pedido",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} itens",
+    "tags": {
+      "popular": "Mais pedido",
+      "vegetarian": "Vegetariano",
+      "spicy": "Picante",
+      "glutenFree": "Sem glúten",
+      "new": "Novidade"
+    }
+  },
+  "itemSheet": {
+    "notesLabel": "Alguma observação?",
+    "notesPlaceholder": "Ex.: sem cebola, ponto para a carne",
+    "quantityLabel": "Quantidade",
+    "decrease": "Diminuir quantidade",
+    "increase": "Aumentar quantidade",
+    "addFor": "Adicionar · {{total}}",
+    "addedToast": "{{name}} adicionado ao pedido"
+  },
+  "order": {
+    "title": "Pedido da mesa",
+    "empty": "O pedido está vazio. Volte ao cardápio para começar.",
+    "goToMenu": "Ver cardápio",
+    "cartSection": "Ainda não enviado",
+    "placedSection": "Na cozinha",
+    "addedBy": "Pedido por {{name}}",
+    "subtotal": "Subtotal",
+    "serviceFee": "Taxa de serviço (10%)",
+    "total": "Total",
+    "place": "Enviar para a cozinha",
+    "placedToast": "Pedido enviado para a cozinha",
+    "split": "Dividir a conta",
+    "removeLine": "Remover {{name}}"
+  },
+  "bill": {
+    "title": "Dividir a conta",
+    "empty": "Ainda não há nada na conta.",
+    "serviceFeeToggle": "Incluir taxa de serviço de 10%",
+    "modes": {
+      "equal": "Por igual",
+      "byItem": "Por item",
+      "custom": "Valores livres"
+    },
+    "modeHint": {
+      "equal": "A conta inteira dividida pelo número de pessoas na mesa.",
+      "byItem": "Marque quem consumiu cada item. Um item marcado por duas pessoas é dividido entre elas.",
+      "custom": "Cada pessoa digita quanto vai pagar. A gente mostra o que ainda falta."
+    },
+    "assignHint": "Toque nos nomes para dizer quem consumiu",
+    "shared": "Dividido entre {{count}}",
+    "unassignedWarning": "{{amount}} ainda não têm dono. Marque quem consumiu esses itens.",
+    "missingWarning": "Faltam {{amount}} para fechar a conta.",
+    "overWarning": "A mesa separou {{amount}} a mais que o total.",
+    "settled": "A conta fecha certinho. Pode chamar o pagamento.",
+    "customLabel": "Quanto {{name}} vai pagar",
+    "suggest": "Dividir o que falta por igual",
+    "markPaid": "Marcar como pago",
+    "markUnpaid": "Desfazer pagamento",
+    "paid": "Pago",
+    "paidToast": "{{name}} marcado como pago",
+    "ofWhichFee": "inclui {{amount}} de taxa",
+    "itemsOf": "Itens de {{name}}",
+    "noItems": "Nenhum item marcado",
+    "summaryTitle": "Resumo da conta",
+    "sharesTitle": "Quem paga o quê",
+    "itemsTitle": "Itens da conta"
+  },
+  "table": {
+    "menu": "Cardápio",
+    "order": "Pedido",
+    "bill": "Conta",
+    "you": "Você",
+    "changeDiner": "Trocar de pessoa",
+    "peopleAtTable_one": "{{count}} pessoa na mesa",
+    "peopleAtTable_other": "{{count}} pessoas na mesa"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "body": "O endereço não existe ou a mesa já foi fechada.",
+    "home": "Ir para o início"
+  }
+}
