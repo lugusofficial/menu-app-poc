@@ -28,7 +28,7 @@ test.describe('scanning a table and ordering', () => {
     await addDish(page, 'Bife ancho 300g')
     await addDish(page, 'Chopp pilsen 300ml', 2)
 
-    const cartBar = page.getByRole('button', { name: /Ver pedido/ })
+    const cartBar = page.getByRole('link', { name: /Ver pedido/ })
     await expect(cartBar).toContainText('3 itens')
     await cartBar.click()
 
@@ -62,6 +62,25 @@ test.describe('scanning a table and ordering', () => {
     await page.reload()
     await tabLink(page, 'Pedido').click()
     await expect(page.getByText('Tiramisù')).toBeVisible()
+  })
+
+  test('removing an item can be undone from the toast', async ({ page }) => {
+    await joinTable(page, 'Ana')
+    await addDish(page, 'Tiramisù')
+    await tabLink(page, 'Pedido').click()
+
+    await page.getByRole('button', { name: 'Diminuir quantidade' }).click()
+    await expect(page.getByText('Tiramisù saiu do pedido')).toBeVisible()
+
+    await page.getByRole('button', { name: 'Desfazer' }).click()
+    await expect(page.getByText('Tiramisù')).toBeVisible()
+    await expect(page.getByText('R$ 32,00').first()).toBeVisible()
+  })
+
+  test('the menu search goes into the URL', async ({ page }) => {
+    await joinTable(page, 'Ana')
+    await page.getByLabel('Buscar no cardápio').fill('ragu')
+    await expect(page).toHaveURL(/[?&]q=ragu/)
   })
 
   test('someone who has not joined is asked who they are first', async ({ page }) => {

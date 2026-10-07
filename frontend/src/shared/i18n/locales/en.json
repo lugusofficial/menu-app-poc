@@ -1,6 +1,6 @@
 {
   "common": {
-    "loading": "Loading...",
+    "loading": "Loading…",
     "error": "We could not load this. Tap to try again.",
     "retry": "Try again",
     "back": "Back",
@@ -9,7 +9,9 @@
     "close": "Close",
     "add": "Add",
     "remove": "Remove",
-    "language": "Language"
+    "language": "Language",
+    "skipToContent": "Skip to content",
+    "undo": "Undo"
   },
   "home": {
     "eyebrow": "Prototype",
@@ -34,7 +36,7 @@
     "title": "Welcome to {{venue}}",
     "tableLabel": "You are at {{table}}",
     "nameLabel": "What should we call you?",
-    "namePlaceholder": "Your first name",
+    "namePlaceholder": "e.g. Ana…",
     "nameError": "Enter a name so we know which items are yours on the bill.",
     "submit": "Join the table",
     "alreadyHere": "Already at the table",
@@ -46,7 +48,7 @@
   "menu": {
     "title": "Menu",
     "searchLabel": "Search the menu",
-    "searchPlaceholder": "Search a dish or ingredient",
+    "searchPlaceholder": "e.g. risotto, prawn…",
     "empty": "Nothing matches that search.",
     "unavailable": "Sold out",
     "viewOrder": "View order",
@@ -62,7 +64,7 @@
   },
   "itemSheet": {
     "notesLabel": "Anything to note?",
-    "notesPlaceholder": "e.g. no onion, medium rare",
+    "notesPlaceholder": "e.g. no onion…",
     "quantityLabel": "Quantity",
     "decrease": "Decrease quantity",
     "increase": "Increase quantity",
@@ -82,7 +84,8 @@
     "place": "Send to the kitchen",
     "placedToast": "Order sent to the kitchen",
     "split": "Split the bill",
-    "removeLine": "Remove {{name}}"
+    "removeLine": "Remove {{name}}",
+    "removedToast": "{{name}} removed from the order"
   },
   "bill": {
     "title": "Split the bill",
@@ -124,7 +127,8 @@
     "you": "You",
     "changeDiner": "Switch person",
     "peopleAtTable_one": "{{count}} person at the table",
-    "peopleAtTable_other": "{{count}} people at the table"
+    "peopleAtTable_other": "{{count}} people at the table",
+    "sections": "Table sections"
   },
   "notFound": {
     "title": "Page not found",

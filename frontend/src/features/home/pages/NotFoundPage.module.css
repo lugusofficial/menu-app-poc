@@ -6,13 +6,12 @@
 }
 
 .emoji {
-  font-size: 2.5rem;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .page h1 {
   margin-top: var(--s-4);
-  font-size: 1.5rem;
 }
 
 .page p {
@@ -20,15 +19,19 @@
 }
 
 .link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   margin-top: var(--s-3);
-  padding: 0.625rem 1.125rem;
-  border-radius: var(--radius-pill);
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: 600;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-md);
+  background: var(--action);
+  color: var(--action-ink);
+  font-weight: 650;
+  transition: background-color 120ms ease;
 }
 
 .link:hover {
-  text-decoration: none;
+  background: var(--action-hover);
 }

@@ -1,5 +1,5 @@
 import { allocateProportionally, divideCents, percentOfCents } from '../../shared/lib/money'
-import type { Diner, OrderLine, TableSession } from '../session/types'
+import type { Diner, OrderLine, SplitMode, TableSession } from '../session/types'
 
 export type DinerShare = {
   dinerId: string
@@ -47,7 +47,11 @@ export function subtotalOf(lines: OrderLine[]): number {
  * and anything left over is reported in `differenceCents` instead of being
  * quietly absorbed.
  */
-export function computeSplit(session: TableSession, serviceFeeRate: number): SplitResult {
+export function computeSplit(
+  session: TableSession,
+  serviceFeeRate: number,
+  mode: SplitMode,
+): SplitResult {
   const billSubtotalCents = subtotalOf(session.lines)
   const billServiceFeeCents = session.serviceFeeIncluded
     ? percentOfCents(billSubtotalCents, serviceFeeRate)
@@ -60,7 +64,7 @@ export function computeSplit(session: TableSession, serviceFeeRate: number): Spl
     return { ...bill, shares: [], unassignedCents: 0, differenceCents: billTotalCents }
   }
 
-  const { shares, unassignedCents } = shareOut(session, serviceFeeRate, billSubtotalCents)
+  const { shares, unassignedCents } = shareOut(session, serviceFeeRate, billSubtotalCents, mode)
   const assigned = shares.reduce((sum, share) => sum + share.totalCents, 0)
 
   return { ...bill, shares, unassignedCents, differenceCents: billTotalCents - assigned }
@@ -70,8 +74,9 @@ function shareOut(
   session: TableSession,
   serviceFeeRate: number,
   billSubtotalCents: number,
+  mode: SplitMode,
 ): { shares: DinerShare[]; unassignedCents: number } {
-  switch (session.splitMode) {
+  switch (mode) {
     case 'equal':
       return {
         shares: splitEqually(session.diners, billSubtotalCents, serviceFeeRate, session.serviceFeeIncluded),

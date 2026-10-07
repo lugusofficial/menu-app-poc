@@ -58,14 +58,16 @@ describe('MenuPage', () => {
     await userEvent.click(within(sheet).getByRole('button', { name: 'Increase quantity' }))
     await userEvent.click(within(sheet).getByRole('button', { name: /Add/ }))
 
-    const cartBar = await screen.findByRole('button', { name: /View order/ })
+    // The cart bar is a link, so middle click and open-in-new-tab work on it.
+    const cartBar = await screen.findByRole('link', { name: /View order/ })
     expect(cartBar).toHaveTextContent('2 items')
     expect(cartBar).toHaveTextContent('32,00')
+    expect(cartBar).toHaveAttribute('href', '/t/cantina-do-porto/12/order')
   })
 
   it('shows no cart bar before anything is ordered', () => {
     renderMenu()
-    expect(screen.queryByRole('button', { name: /View order/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /View order/ })).not.toBeInTheDocument()
   })
 
   it('does not open the sheet for a sold out dish', async () => {

@@ -1,6 +1,6 @@
 {
   "common": {
-    "loading": "Carregando...",
+    "loading": "Carregando…",
     "error": "Não foi possível carregar. Toque para tentar de novo.",
     "retry": "Tentar de novo",
     "back": "Voltar",
@@ -9,7 +9,9 @@
     "close": "Fechar",
     "add": "Adicionar",
     "remove": "Remover",
-    "language": "Idioma"
+    "language": "Idioma",
+    "skipToContent": "Ir para o conteúdo",
+    "undo": "Desfazer"
   },
   "home": {
     "eyebrow": "Protótipo",
@@ -34,7 +36,7 @@
     "title": "Bem-vindo à {{venue}}",
     "tableLabel": "Você está na {{table}}",
     "nameLabel": "Como podemos te chamar?",
-    "namePlaceholder": "Seu primeiro nome",
+    "namePlaceholder": "Ex.: Ana…",
     "nameError": "Escreva um nome para a gente saber o que é seu na conta.",
     "submit": "Entrar na mesa",
     "alreadyHere": "Já estão na mesa",
@@ -46,7 +48,7 @@
   "menu": {
     "title": "Cardápio",
     "searchLabel": "Buscar no cardápio",
-    "searchPlaceholder": "Buscar prato ou ingrediente",
+    "searchPlaceholder": "Ex.: risoto, camarão…",
     "empty": "Nada encontrado com esse termo.",
     "unavailable": "Esgotado",
     "viewOrder": "Ver pedido",
@@ -62,7 +64,7 @@
   },
   "itemSheet": {
     "notesLabel": "Alguma observação?",
-    "notesPlaceholder": "Ex.: sem cebola, ponto para a carne",
+    "notesPlaceholder": "Ex.: sem cebola…",
     "quantityLabel": "Quantidade",
     "decrease": "Diminuir quantidade",
     "increase": "Aumentar quantidade",
@@ -82,7 +84,8 @@
     "place": "Enviar para a cozinha",
     "placedToast": "Pedido enviado para a cozinha",
     "split": "Dividir a conta",
-    "removeLine": "Remover {{name}}"
+    "removeLine": "Remover {{name}}",
+    "removedToast": "{{name}} saiu do pedido"
   },
   "bill": {
     "title": "Dividir a conta",
@@ -124,7 +127,8 @@
     "you": "Você",
     "changeDiner": "Trocar de pessoa",
     "peopleAtTable_one": "{{count}} pessoa na mesa",
-    "peopleAtTable_other": "{{count}} pessoas na mesa"
+    "peopleAtTable_other": "{{count}} pessoas na mesa",
+    "sections": "Seções da mesa"
   },
   "notFound": {
     "title": "Página não encontrada",

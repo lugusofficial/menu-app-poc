@@ -1,10 +1,12 @@
 import { useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTableContext } from '../../../app/tableContext'
 import { useTableSession } from '../../session/TableSessionContext'
 import type { SplitMode } from '../../session/types'
 import { DinerAvatar, DinerToggle } from '../../../shared/components/DinerChip'
 import { useToast } from '../../../shared/components/Toast'
+import { dinerColor } from '../../../shared/lib/dinerColor'
 import { formatCents } from '../../../shared/lib/money'
 import { CustomAmountField } from '../components/CustomAmountField'
 import { computeSplit, lineTotalCents, suggestCustomAmounts } from '../split'
@@ -12,21 +14,41 @@ import styles from './BillPage.module.css'
 
 const MODES: SplitMode[] = ['equal', 'byItem', 'custom']
 
+function isSplitMode(value: string | null): value is SplitMode {
+  return value !== null && (MODES as string[]).includes(value)
+}
+
 export function BillPage() {
   const { t } = useTranslation()
   const { menu } = useTableContext()
-  const { session, dispatch, setSplitMode } = useTableSession()
+  const { session, dispatch } = useTableSession()
   const toast = useToast()
+
+  // The mode lives in the URL, so a diner can send "look at the by-item split"
+  // and it opens the way they left it, back button included.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const modeParam = searchParams.get('split')
+  const mode: SplitMode = isSplitMode(modeParam) ? modeParam : 'equal'
+
+  const setMode = (next: SplitMode) => {
+    const params = new URLSearchParams(searchParams)
+    if (next === 'equal') params.delete('split')
+    else params.set('split', next)
+    setSearchParams(params, { replace: true })
+  }
 
   const { currency, locale, serviceFeeRate } = menu.venue
   const money = (cents: number) => formatCents(cents, locale, currency)
 
-  const split = useMemo(() => computeSplit(session, serviceFeeRate), [session, serviceFeeRate])
+  const split = useMemo(
+    () => computeSplit(session, serviceFeeRate, mode),
+    [session, serviceFeeRate, mode],
+  )
 
   if (session.lines.length === 0) {
     return (
       <section>
-        <h1 className={styles.title}>{t('bill.title')}</h1>
+        <h1>{t('bill.title')}</h1>
         <p className={styles.empty}>{t('bill.empty')}</p>
       </section>
     )
@@ -42,13 +64,13 @@ export function BillPage() {
   const togglePaid = (dinerId: string, name: string) => {
     dispatch({ type: 'togglePaid', dinerId })
     if (!session.paidDinerIds.includes(dinerId)) {
-      toast.show(t('bill.paidToast', { name }), 'success')
+      toast.show(t('bill.paidToast', { name }), { tone: 'success' })
     }
   }
 
   return (
     <section>
-      <h1 className={styles.title}>{t('bill.title')}</h1>
+      <h1>{t('bill.title')}</h1>
 
       <dl className={styles.summary} aria-label={t('bill.summaryTitle')}>
         <div>
@@ -73,27 +95,27 @@ export function BillPage() {
           checked={session.serviceFeeIncluded}
           onChange={() => dispatch({ type: 'toggleServiceFee' })}
         />
-        {t('bill.serviceFeeToggle')}
+        <span>{t('bill.serviceFeeToggle')}</span>
       </label>
 
       <div className={styles.modes} role="tablist" aria-label={t('bill.title')}>
-        {MODES.map((mode) => (
+        {MODES.map((value) => (
           <button
-            key={mode}
+            key={value}
             type="button"
             role="tab"
-            aria-selected={session.splitMode === mode}
-            className={`${styles.mode} ${session.splitMode === mode ? styles.modeActive : ''}`}
-            onClick={() => setSplitMode(mode)}
+            aria-selected={mode === value}
+            className={`${styles.mode} ${mode === value ? styles.modeActive : ''}`}
+            onClick={() => setMode(value)}
           >
-            {t(`bill.modes.${mode}`)}
+            {t(`bill.modes.${value}`)}
           </button>
         ))}
       </div>
-      <p className={styles.modeHint}>{t(`bill.modeHint.${session.splitMode}`)}</p>
+      <p className={styles.modeHint}>{t(`bill.modeHint.${mode}`)}</p>
 
-      {session.splitMode === 'byItem' && (
-        <div className={styles.assign}>
+      {mode === 'byItem' && (
+        <>
           <h2 className={styles.sectionTitle}>{t('bill.assignHint')}</h2>
           <ul className={styles.assignList} aria-label={t('bill.itemsTitle')}>
             {session.lines.map((line) => {
@@ -125,17 +147,19 @@ export function BillPage() {
                     ))}
                   </div>
                   {sharedBy.length > 1 && (
-                    <p className={styles.sharedNote}>{t('bill.shared', { count: sharedBy.length })}</p>
+                    <p className={styles.sharedNote}>
+                      {t('bill.shared', { count: sharedBy.length })}
+                    </p>
                   )}
                 </li>
               )
             })}
           </ul>
-        </div>
+        </>
       )}
 
-      {/* One polite live region, so a screen reader hears the bill settle as
-          the table taps names rather than being interrupted by each change. */}
+      {/* One polite live region, so a screen reader hears the bill settle as the
+          table taps names rather than being interrupted by each change. */}
       <div aria-live="polite">
         {split.unassignedCents > 0 && (
           <p className={`${styles.notice} ${styles.warning}`}>
@@ -157,7 +181,7 @@ export function BillPage() {
         )}
       </div>
 
-      {session.splitMode === 'custom' && (
+      {mode === 'custom' && (
         <button type="button" className={styles.suggest} onClick={suggest}>
           {t('bill.suggest')}
         </button>
@@ -167,22 +191,29 @@ export function BillPage() {
         {split.shares.map((share) => {
           const paid = session.paidDinerIds.includes(share.dinerId)
           return (
-            <li key={share.dinerId} className={`${styles.share} ${paid ? styles.sharePaid : ''}`}>
+            <li
+              key={share.dinerId}
+              className={`${styles.share} ${paid ? styles.sharePaid : ''}`}
+              /* The stripe down the edge is this person's colour, tying the card
+                 to their avatar and to their chips on the items above. */
+              style={{ borderInlineStartColor: dinerColor(share.colorIndex) }}
+            >
               <div className={styles.shareHead}>
                 <DinerAvatar name={share.name} colorIndex={share.colorIndex} />
                 <span className={styles.shareName}>{share.name}</span>
                 {paid && <span className={styles.paidTag}>{t('bill.paid')}</span>}
-                <span className={styles.shareTotal}>{money(share.totalCents)}</span>
               </div>
 
+              <p className={styles.shareTotal}>{money(share.totalCents)}</p>
+
               {share.serviceFeeCents > 0 && (
-                <p className={styles.shareFee}>
+                <p className={styles.shareMeta}>
                   {t('bill.ofWhichFee', { amount: money(share.serviceFeeCents) })}
                 </p>
               )}
 
-              {session.splitMode === 'byItem' && (
-                <p className={styles.shareItems}>
+              {mode === 'byItem' && (
+                <p className={styles.shareMeta}>
                   {share.lineIds.length === 0
                     ? t('bill.noItems')
                     : share.lineIds
@@ -192,7 +223,7 @@ export function BillPage() {
                 </p>
               )}
 
-              {session.splitMode === 'custom' && (
+              {mode === 'custom' && (
                 <CustomAmountField
                   id={`amount-${share.dinerId}`}
                   label={t('bill.customLabel', { name: share.name })}

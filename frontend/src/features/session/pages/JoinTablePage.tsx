@@ -22,6 +22,8 @@ export function JoinTablePage() {
     event.preventDefault()
     if (name.trim() === '') {
       setError(t('join.nameError'))
+      // The field that failed takes focus, so the fix is one keystroke away.
+      document.getElementById('diner-name')?.focus()
       return
     }
     setError(null)
@@ -38,8 +40,10 @@ export function JoinTablePage() {
 
   return (
     <section className={styles.page}>
-      <h1 className={styles.title}>{t('join.title', { venue: menu.venue.name })}</h1>
       <p className={styles.table}>{t('join.tableLabel', { table: table.label })}</p>
+      <h1 className={styles.title}>
+        {t('join.title', { venue: menu.venue.name })}
+      </h1>
       <p className={styles.tagline}>{menu.venue.tagline}</p>
 
       {showContinue ? (
@@ -63,11 +67,15 @@ export function JoinTablePage() {
             </label>
             <input
               id="diner-name"
+              name="given-name"
+              type="text"
               className={`${styles.input} ${error ? styles.inputError : ''}`}
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder={t('join.namePlaceholder')}
               autoComplete="given-name"
+              // A first name is not a dictionary word: the red squiggle is noise.
+              spellCheck={false}
               aria-invalid={error !== null}
               aria-describedby={error ? 'diner-name-error' : undefined}
             />
@@ -94,8 +102,8 @@ export function JoinTablePage() {
                   className={styles.seatedButton}
                   onClick={() => continueAs(diner.dinerId)}
                 >
-                  <DinerAvatar name={diner.name} colorIndex={diner.colorIndex} />
-                  <span>{diner.name}</span>
+                  <DinerAvatar name={diner.name} colorIndex={diner.colorIndex} size="sm" />
+                  <span className={styles.seatedName}>{diner.name}</span>
                   {diner.dinerId === currentDiner?.dinerId && (
                     <span className={styles.youTag}>{t('table.you')}</span>
                   )}

@@ -5,24 +5,23 @@ import styles from './Toast.module.css'
 
 export type ToastTone = 'info' | 'success' | 'warning'
 
+export type ToastAction = { label: string; onAction: () => void }
+
 type ToastItem = {
   id: number
   message: string
   tone: ToastTone
   durationMs: number
+  action?: ToastAction
 }
 
+type ShowOptions = { tone?: ToastTone; durationMs?: number; action?: ToastAction }
+
 type ToastContextValue = {
-  show: (message: string, tone?: ToastTone, durationMs?: number) => void
+  show: (message: string, options?: ShowOptions) => void
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null)
-
-const ICON: Record<ToastTone, string> = {
-  info: 'i',
-  success: '✓',
-  warning: '!',
-}
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastItem | null>(null)
@@ -36,10 +35,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const show = useCallback((message: string, tone: ToastTone = 'info', durationMs = 3200) => {
+  const show = useCallback((message: string, options: ShowOptions = {}) => {
+    const { tone = 'info', action } = options
     clearTimer()
     idRef.current += 1
-    setToast({ id: idRef.current, message, tone, durationMs })
+    setToast({
+      id: idRef.current,
+      message,
+      tone,
+      // An undo offer has to outlive a glance, so it gets longer by default.
+      durationMs: options.durationMs ?? (action ? 7000 : 3200),
+      action,
+    })
   }, [])
 
   useEffect(() => {
@@ -52,18 +59,31 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      {toast &&
-        createPortal(
-          <div className={styles.container} aria-live="polite" aria-atomic="true">
-            <div key={toast.id} className={`${styles.toast} ${styles[toast.tone]}`} role="status">
-              <span className={styles.icon} aria-hidden="true">
-                {ICON[toast.tone]}
-              </span>
+      {createPortal(
+        // The live region is always mounted, so a screen reader announces each
+        // message instead of only noticing the region appearing.
+        <div className={styles.container} role="status" aria-live="polite" aria-atomic="true">
+          {toast && (
+            <div key={toast.id} className={`${styles.toast} ${styles[toast.tone]}`}>
+              <span className={styles.bar} aria-hidden="true" />
               <p className={styles.message}>{toast.message}</p>
+              {toast.action && (
+                <button
+                  type="button"
+                  className={styles.action}
+                  onClick={() => {
+                    toast.action?.onAction()
+                    setToast(null)
+                  }}
+                >
+                  {toast.action.label}
+                </button>
+              )}
             </div>
-          </div>,
-          document.body,
-        )}
+          )}
+        </div>,
+        document.body,
+      )}
     </ToastContext.Provider>
   )
 }

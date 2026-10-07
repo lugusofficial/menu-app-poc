@@ -103,6 +103,18 @@ describe('OrderPage', () => {
     expect(await screen.findByText('The order is empty. Go back to the menu to start.')).toBeInTheDocument()
   })
 
+  it('offers an undo when a line is removed, and puts it back', async () => {
+    seedSession({ diners: [ana], currentDinerId: 'd1', lines: [line()] })
+    renderInTable(<OrderPage />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Decrease quantity' }))
+    expect(await screen.findByText('Chopp pilsen 300ml removed from the order')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(await screen.findByText('Chopp pilsen 300ml')).toBeInTheDocument()
+    expect(amountFor('Subtotal')).toMatch(/16,00/)
+  })
+
   it('sends the order to the kitchen and says so', async () => {
     seedSession({ diners: [ana], currentDinerId: 'd1', lines: [line()] })
     renderInTable(<OrderPage />)

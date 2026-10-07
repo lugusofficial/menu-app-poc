@@ -20,6 +20,7 @@ export type OrderLine = {
   placedAt: string | null
 }
 
+/** How the bill is being split. View state: it lives in the URL, not here. */
 export type SplitMode = 'equal' | 'byItem' | 'custom'
 
 export type TableSession = {
@@ -32,7 +33,6 @@ export type TableSession = {
   lines: OrderLine[]
   /** lineId -> diners sharing that line, used by the byItem split. */
   assignments: Record<string, string[]>
-  splitMode: SplitMode
   /** dinerId -> cents typed by hand, used by the custom split. */
   customAmounts: Record<string, number>
   /** Whether the optional 10% service fee is on the bill. */

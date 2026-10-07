@@ -2,7 +2,8 @@
   display: block;
   padding: var(--s-2);
   border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  border-radius: var(--r-md);
+  /* The code itself always sits on white: a dark card would stop it scanning. */
   background: #fff;
 }
 

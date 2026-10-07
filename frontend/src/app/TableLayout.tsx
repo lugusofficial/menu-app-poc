@@ -22,24 +22,28 @@ export function TableLayout() {
   )
   const { data, loading, error } = useAsync(load)
 
-  if (loading) return <p className={styles.state}>{t('common.loading')}</p>
+  if (loading) {
+    return (
+      <p className={styles.state} aria-live="polite">
+        {t('common.loading')}
+      </p>
+    )
+  }
 
   if (error || !data) {
     return (
       <div className={styles.state}>
         <h1>{t('join.notFound')}</h1>
         <p>{t('join.notFoundBody')}</p>
-        <Link to="/">{t('notFound.home')}</Link>
+        <Link to="/" className={styles.stateLink}>
+          {t('notFound.home')}
+        </Link>
       </div>
     )
   }
 
   return (
-    <TableSessionProvider
-      key={`${venueSlug}/${tableId}`}
-      venueSlug={venueSlug}
-      tableId={tableId}
-    >
+    <TableSessionProvider key={`${venueSlug}/${tableId}`} venueSlug={venueSlug} tableId={tableId}>
       <TableChrome context={data} />
     </TableSessionProvider>
   )
@@ -53,14 +57,21 @@ function TableChrome({ context }: { context: TableContext }) {
 
   return (
     <div className={styles.shell}>
+      <a href="#main" className="skipLink">
+        {t('common.skipToContent')}
+      </a>
+
       <header className={styles.header}>
         <div className={styles.headerTop}>
           <Link to="/" className={styles.venue}>
             <span className={styles.venueEmoji} aria-hidden="true">
               {menu.venue.emoji}
             </span>
-            <span>
-              <span className={styles.venueName}>{menu.venue.name}</span>
+            <span className={styles.venueText}>
+              {/* A venue name is a proper noun: never machine translated. */}
+              <span className={styles.venueName} translate="no">
+                {menu.venue.name}
+              </span>
               <span className={styles.tableName}>{table.label}</span>
             </span>
           </Link>
@@ -73,8 +84,9 @@ function TableChrome({ context }: { context: TableContext }) {
               {session.diners.map((diner) => (
                 <span
                   key={diner.dinerId}
-                  className={diner.dinerId === currentDiner?.dinerId ? styles.dinerSelf : undefined}
-                  title={diner.name}
+                  className={`${styles.dinerSlot} ${
+                    diner.dinerId === currentDiner?.dinerId ? styles.dinerSelf : ''
+                  }`}
                 >
                   <DinerAvatar name={diner.name} colorIndex={diner.colorIndex} size="sm" />
                 </span>
@@ -87,23 +99,29 @@ function TableChrome({ context }: { context: TableContext }) {
         )}
       </header>
 
-      <main className={styles.main}>
+      <main className={styles.main} id="main">
         <Outlet context={context} />
       </main>
 
       {currentDiner && (
-        <nav className={styles.tabs} aria-label={menu.venue.name}>
+        <nav className={styles.tabs} aria-label={t('table.sections')}>
           <NavLink to={`${base}/menu`} className={navClass}>
-            <span aria-hidden="true">🍽️</span>
+            <span className={styles.tabIcon} aria-hidden="true">
+              🍽️
+            </span>
             {t('table.menu')}
           </NavLink>
           <NavLink to={`${base}/order`} className={navClass}>
-            <span aria-hidden="true">🧾</span>
+            <span className={styles.tabIcon} aria-hidden="true">
+              🧾
+            </span>
             {t('table.order')}
             {cartQuantity > 0 && <span className={styles.badge}>{cartQuantity}</span>}
           </NavLink>
           <NavLink to={`${base}/bill`} className={navClass}>
-            <span aria-hidden="true">🤝</span>
+            <span className={styles.tabIcon} aria-hidden="true">
+              🤝
+            </span>
             {t('table.bill')}
           </NavLink>
         </nav>

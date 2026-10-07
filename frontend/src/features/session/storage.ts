@@ -19,7 +19,6 @@ export function emptySession(
     currentDinerId: null,
     lines: [],
     assignments: {},
-    splitMode: 'equal',
     customAmounts: {},
     serviceFeeIncluded: true,
     paidDinerIds: [],

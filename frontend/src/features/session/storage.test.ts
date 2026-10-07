@@ -17,7 +17,6 @@ describe('emptySession', () => {
       diners: [],
       lines: [],
       currentDinerId: null,
-      splitMode: 'equal',
       serviceFeeIncluded: true,
     })
   })
@@ -58,10 +57,10 @@ describe('loadSession and saveSession', () => {
   it('fills in fields a stored session is missing', () => {
     window.localStorage.setItem(
       sessionKey('cantina', '7'),
-      JSON.stringify({ diners: [], lines: [], splitMode: 'byItem' }),
+      JSON.stringify({ diners: [], lines: [], serviceFeeIncluded: false }),
     )
     const session = loadSession('cantina', '7')
-    expect(session.splitMode).toBe('byItem')
+    expect(session.serviceFeeIncluded).toBe(false)
     expect(session.assignments).toEqual({})
     expect(session.paidDinerIds).toEqual([])
   })

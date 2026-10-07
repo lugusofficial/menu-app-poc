@@ -25,6 +25,7 @@ export function ItemSheet({
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
+    // Focus moves into the sheet so the keyboard is not left behind the overlay.
     closeRef.current?.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
@@ -44,6 +45,8 @@ export function ItemSheet({
         aria-label={item.name}
         onClick={(event) => event.stopPropagation()}
       >
+        <div className={styles.grabber} aria-hidden="true" />
+
         <button
           type="button"
           ref={closeRef}
@@ -51,7 +54,7 @@ export function ItemSheet({
           onClick={onClose}
           aria-label={t('common.close')}
         >
-          ✕
+          <span aria-hidden="true">✕</span>
         </button>
 
         <span className={styles.emoji} aria-hidden="true">
@@ -66,6 +69,7 @@ export function ItemSheet({
         </label>
         <textarea
           id="item-notes"
+          name="notes"
           className={styles.textarea}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
@@ -81,7 +85,7 @@ export function ItemSheet({
               aria-label={t('itemSheet.decrease')}
               disabled={quantity <= 1}
             >
-              −
+              <span aria-hidden="true">−</span>
             </button>
             <output className={styles.quantity}>{quantity}</output>
             <button
@@ -89,15 +93,11 @@ export function ItemSheet({
               onClick={() => setQuantity((q) => Math.min(20, q + 1))}
               aria-label={t('itemSheet.increase')}
             >
-              +
+              <span aria-hidden="true">+</span>
             </button>
           </div>
 
-          <button
-            type="button"
-            className={styles.add}
-            onClick={() => onAdd(item, quantity, notes)}
-          >
+          <button type="button" className={styles.add} onClick={() => onAdd(item, quantity, notes)}>
             {t('itemSheet.addFor', { total: formatCents(total, locale, currency) })}
           </button>
         </div>

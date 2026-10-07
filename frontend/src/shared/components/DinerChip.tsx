@@ -22,8 +22,9 @@ export function DinerAvatar({
 }
 
 /**
- * A diner's name as a tappable pill. Used on the bill to say who had an item,
- * so it is a real button with a pressed state rather than a styled div.
+ * A diner's name as a toggle, used on the bill to say who had an item. It is a
+ * real button with `aria-pressed` rather than a styled div, so it reaches the
+ * keyboard and announces its state.
  */
 export function DinerToggle({
   name,
@@ -36,15 +37,18 @@ export function DinerToggle({
   selected: boolean
   onToggle: () => void
 }) {
+  const color = dinerColor(colorIndex)
+
   return (
     <button
       type="button"
       className={`${styles.toggle} ${selected ? styles.toggleOn : ''}`}
-      style={selected ? { backgroundColor: dinerColor(colorIndex), borderColor: dinerColor(colorIndex) } : undefined}
+      style={selected ? { backgroundColor: color, borderColor: color } : { color }}
       aria-pressed={selected}
       onClick={onToggle}
     >
-      {name}
+      <span className={styles.dot} aria-hidden="true" />
+      <span style={selected ? undefined : { color: 'var(--ink-soft)' }}>{name}</span>
     </button>
   )
 }

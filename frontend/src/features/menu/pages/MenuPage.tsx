@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTableContext } from '../../../app/tableContext'
 import { useTableSession } from '../../session/TableSessionContext'
@@ -13,12 +13,21 @@ import styles from './MenuPage.module.css'
 
 export function MenuPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { menu, table } = useTableContext()
   const { addItem, cartLines, cartQuantity } = useTableSession()
   const toast = useToast()
 
-  const [query, setQuery] = useState('')
+  // The search sits in the URL so a diner can send "look at this" and the other
+  // phone opens on the same filtered menu.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const query = searchParams.get('q') ?? ''
+  const setQuery = (value: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (value === '') params.delete('q')
+    else params.set('q', value)
+    setSearchParams(params, { replace: true })
+  }
+
   const [selected, setSelected] = useState<MenuItem | null>(null)
   const { currency, locale } = menu.venue
 
@@ -32,16 +41,17 @@ export function MenuPage() {
   )
 
   const cartTotal = cartLines.reduce((sum, line) => sum + line.unitPriceCents * line.quantity, 0)
+  const orderPath = `/t/${encodeURIComponent(menu.venue.venueSlug)}/${encodeURIComponent(table.tableId)}/order`
 
   const add = (item: MenuItem, quantity: number, notes: string) => {
     addItem(item, quantity, notes)
     setSelected(null)
-    toast.show(t('itemSheet.addedToast', { name: item.name }), 'success')
+    toast.show(t('itemSheet.addedToast', { name: item.name }), { tone: 'success' })
   }
 
   return (
     <section>
-      <h1 className={styles.title}>{t('menu.title')}</h1>
+      <h1>{t('menu.title')}</h1>
 
       <div className={styles.search}>
         <label className={styles.srOnly} htmlFor="menu-search">
@@ -49,11 +59,14 @@ export function MenuPage() {
         </label>
         <input
           id="menu-search"
+          name="q"
           type="search"
           className={styles.searchInput}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t('menu.searchPlaceholder')}
+          autoComplete="off"
+          spellCheck={false}
         />
       </div>
 
@@ -90,20 +103,13 @@ export function MenuPage() {
         />
       )}
 
+      {/* Navigation, so it opens in a new tab on middle click like any link. */}
       {cartQuantity > 0 && (
-        <button
-          type="button"
-          className={styles.cartBar}
-          onClick={() =>
-            navigate(
-              `/t/${encodeURIComponent(menu.venue.venueSlug)}/${encodeURIComponent(table.tableId)}/order`,
-            )
-          }
-        >
+        <Link to={orderPath} className={styles.cartBar}>
           <span className={styles.cartCount}>{t('menu.itemCount', { count: cartQuantity })}</span>
-          <span>{t('menu.viewOrder')}</span>
+          <span className={styles.cartLabel}>{t('menu.viewOrder')}</span>
           <span className={styles.cartTotal}>{formatCents(cartTotal, locale, currency)}</span>
-        </button>
+        </Link>
       )}
     </section>
   )

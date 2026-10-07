@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, it, expect, beforeEach } from 'vitest'
 import i18n from '../../../shared/i18n'
 import { renderInTable, seedSession } from '../../../test/renderTable'
-import type { OrderLine, TableSession } from '../../session/types'
+import type { OrderLine, SplitMode, TableSession } from '../../session/types'
 import { BillPage } from './BillPage'
 
 const AT = '2026-10-06T20:00:00.000Z'
@@ -28,7 +28,8 @@ function line(lineId: string, name: string, unitPriceCents: number, addedBy = 'd
 const STEAK = line('l1', 'Bife ancho', 10000, 'd1')
 const BEER = line('l2', 'Chopp', 2000, 'd2')
 
-function renderBill(overrides: Partial<TableSession> = {}) {
+/** The split mode is view state, so it arrives through the URL, not the session. */
+function renderBill({ mode, ...overrides }: Partial<TableSession> & { mode?: SplitMode } = {}) {
   seedSession({
     diners: [ana, bruno],
     currentDinerId: 'd1',
@@ -36,7 +37,8 @@ function renderBill(overrides: Partial<TableSession> = {}) {
     assignments: { l1: ['d1'], l2: ['d2'] },
     ...overrides,
   })
-  return renderInTable(<BillPage />)
+  const route = `/t/cantina-do-porto/12/bill${mode ? `?split=${mode}` : ''}`
+  return renderInTable(<BillPage />, { route })
 }
 
 /** The card of one diner, so an amount is read from the right person and not
@@ -94,7 +96,7 @@ describe('BillPage', () => {
   })
 
   it('splits a shared item between the diners who tapped it', async () => {
-    renderBill({ assignments: { l1: ['d1', 'd2'], l2: ['d2'] }, splitMode: 'byItem' })
+    renderBill({ assignments: { l1: ['d1', 'd2'], l2: ['d2'] }, mode: 'byItem' })
 
     expect(shareOf('Ana')).toHaveTextContent('55,00')
     expect(shareOf('Bruno')).toHaveTextContent('77,00')
@@ -102,7 +104,7 @@ describe('BillPage', () => {
   })
 
   it('adds a diner to an item when their name is tapped', async () => {
-    renderBill({ splitMode: 'byItem' })
+    renderBill({ mode: 'byItem' })
 
     await userEvent.click(within(itemRow(/Bife ancho/)).getByRole('button', { name: 'Bruno' }))
 
@@ -111,39 +113,39 @@ describe('BillPage', () => {
   })
 
   it('warns about items nobody has taken', async () => {
-    renderBill({ splitMode: 'byItem', assignments: { l1: ['d1'], l2: [] } })
+    renderBill({ mode: 'byItem', assignments: { l1: ['d1'], l2: [] } })
     expect(screen.getByText(/20,00 has nobody on it yet/)).toBeInTheDocument()
   })
 
   it('says the bill is settled once every item has an owner', () => {
-    renderBill({ splitMode: 'byItem' })
+    renderBill({ mode: 'byItem' })
     expect(screen.getByText('The bill adds up. You can go ahead and pay.')).toBeInTheDocument()
   })
 
   it('lists the items each diner is paying for', () => {
-    renderBill({ splitMode: 'byItem' })
+    renderBill({ mode: 'byItem' })
     expect(shareOf('Ana')).toHaveTextContent('Bife ancho')
     expect(shareOf('Bruno')).toHaveTextContent('Chopp')
   })
 
   it('reports what is still missing in the custom mode', async () => {
-    renderBill({ splitMode: 'custom', customAmounts: { d1: 10000 } })
+    renderBill({ mode: 'custom', customAmounts: { d1: 10000 } })
     expect(screen.getByText(/32,00 is still missing/)).toBeInTheDocument()
   })
 
   it('reports when the table has put in more than the total', () => {
-    renderBill({ splitMode: 'custom', customAmounts: { d1: 10000, d2: 10000 } })
+    renderBill({ mode: 'custom', customAmounts: { d1: 10000, d2: 10000 } })
     expect(screen.getByText(/68,00 more than the total/)).toBeInTheDocument()
   })
 
   it('takes a typed amount for one diner', async () => {
-    renderBill({ splitMode: 'custom' })
+    renderBill({ mode: 'custom' })
     await userEvent.type(screen.getByLabelText('How much Ana will pay'), '50')
     expect(shareOf('Ana')).toHaveTextContent('50,00')
   })
 
   it('fills the custom amounts evenly on request', async () => {
-    renderBill({ splitMode: 'custom' })
+    renderBill({ mode: 'custom' })
     await userEvent.click(screen.getByRole('button', { name: 'Split what is left evenly' }))
 
     expect(shareOf('Ana')).toHaveTextContent('66,00')
@@ -163,11 +165,34 @@ describe('BillPage', () => {
     expect(shareOf('Ana')).not.toHaveTextContent('Paid')
   })
 
-  it('keeps the chosen split mode on the table session', async () => {
+  it('opens on the mode named in the URL', () => {
+    renderBill({ mode: 'custom' })
+    expect(screen.getByRole('tab', { name: 'Free amounts' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    expect(screen.getByLabelText('How much Ana will pay')).toBeInTheDocument()
+  })
+
+  it('falls back to the even split when the URL names no mode', () => {
+    renderBill()
+    expect(screen.getByRole('tab', { name: 'Evenly' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('falls back to the even split when the URL names a mode that does not exist', () => {
+    seedSession({ diners: [ana, bruno], currentDinerId: 'd1', lines: [STEAK, BEER] })
+    renderInTable(<BillPage />, { route: '/t/cantina-do-porto/12/bill?split=nonsense' })
+    expect(screen.getByRole('tab', { name: 'Evenly' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('switches the split shown when another tab is picked', async () => {
     renderBill()
     await userEvent.click(screen.getByRole('tab', { name: 'Free amounts' }))
 
-    const stored = JSON.parse(window.localStorage.getItem('mesa.session.cantina-do-porto.12') ?? '{}')
-    expect(stored.splitMode).toBe('custom')
+    expect(screen.getByRole('tab', { name: 'Free amounts' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    expect(screen.getByLabelText('How much Ana will pay')).toBeInTheDocument()
   })
 })

@@ -1,6 +1,6 @@
 import type { MenuItem } from '../menu/types'
 import { emptySession } from './storage'
-import type { Diner, OrderLine, SplitMode, TableSession } from './types'
+import type { Diner, OrderLine, TableSession } from './types'
 
 // The reducer is pure: ids and timestamps always arrive in the action, so tests
 // can fix them and two phones at the same table stay comparable.
@@ -17,8 +17,8 @@ export type SessionAction =
     }
   | { type: 'setQuantity'; lineId: string; quantity: number }
   | { type: 'removeLine'; lineId: string }
+  | { type: 'restoreLine'; line: OrderLine; sharedBy: string[] }
   | { type: 'placeOrder'; placedAt: string }
-  | { type: 'setSplitMode'; mode: SplitMode }
   | { type: 'toggleAssignment'; lineId: string; dinerId: string }
   | { type: 'setCustomAmount'; dinerId: string; cents: number }
   | { type: 'toggleServiceFee' }
@@ -109,6 +109,17 @@ export function sessionReducer(state: TableSession, action: SessionAction): Tabl
       }
     }
 
+    case 'restoreLine': {
+      // Undo of a removal: the line goes back where it was, with the people who
+      // were sharing it, so undoing is a true reversal and not a re-add.
+      if (state.lines.some((line) => line.lineId === action.line.lineId)) return state
+      return {
+        ...state,
+        lines: [...state.lines, action.line],
+        assignments: { ...state.assignments, [action.line.lineId]: action.sharedBy },
+      }
+    }
+
     case 'placeOrder': {
       if (!state.lines.some((line) => line.status === 'cart')) return state
       return {
@@ -120,9 +131,6 @@ export function sessionReducer(state: TableSession, action: SessionAction): Tabl
         ),
       }
     }
-
-    case 'setSplitMode':
-      return { ...state, splitMode: action.mode }
 
     case 'toggleAssignment': {
       const current = state.assignments[action.lineId] ?? []

@@ -6,23 +6,46 @@
   max-width: var(--app-max-width);
   margin: 0 auto;
   background: var(--bg);
+  /* The phone frame on a desktop screen reads as a device, not a stretched page. */
+  border-inline: 1px solid var(--line);
+}
+
+@media (max-width: 520px) {
+  .shell {
+    border-inline: none;
+  }
 }
 
 .state {
   max-width: var(--app-max-width);
   margin: 0 auto;
-  padding: var(--s-7) var(--s-4);
+  padding: var(--s-8) var(--s-4);
   text-align: center;
   color: var(--ink-muted);
+}
+
+.state h1 {
+  color: var(--ink);
+}
+
+.stateLink {
+  display: inline-block;
+  margin-top: var(--s-2);
+  min-height: 44px;
+  padding: 0.7rem var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--action);
+  color: var(--action-ink);
+  font-weight: 650;
 }
 
 .header {
   position: sticky;
   top: 0;
   z-index: 20;
-  padding: var(--s-3) var(--s-4) var(--s-2);
+  padding: var(--s-3) var(--s-4);
   background: var(--bg-veil);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -38,23 +61,25 @@
   align-items: center;
   gap: var(--s-2);
   min-width: 0;
-  color: var(--ink);
-}
-
-.venue:hover {
-  text-decoration: none;
+  padding: 2px;
+  margin: -2px;
 }
 
 .venueEmoji {
-  font-size: 1.5rem;
+  flex: none;
+  font-size: 1.25rem;
   line-height: 1;
+}
+
+.venueText {
+  min-width: 0;
 }
 
 .venueName {
   display: block;
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -63,47 +88,53 @@
 
 .tableName {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--ink-muted);
 }
 
 .diners {
   display: flex;
   align-items: center;
   gap: var(--s-2);
-  margin-top: var(--s-2);
+  margin-top: var(--s-3);
 }
 
 .dinerStack {
   display: inline-flex;
+  flex: none;
 }
 
 .dinerStack > * + * {
-  margin-left: -6px;
+  margin-left: -5px;
 }
 
-.dinerStack > span {
+.dinerSlot {
   display: inline-flex;
-  border-radius: 50%;
+  border-radius: var(--r-full);
   box-shadow: 0 0 0 2px var(--bg);
 }
 
+/* Whoever is holding this phone gets a ring, so "which one am I" is answered
+   without a label taking up a line. */
 .dinerSelf {
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink);
 }
 
 .dinerCount {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.75rem;
   color: var(--ink-muted);
 }
 
 .main {
   flex: 1;
-  padding: var(--s-4) var(--s-4) var(--s-9);
-  animation: fadeIn 200ms ease both;
+  padding: var(--s-5) var(--s-4) calc(var(--tabbar-h) + var(--s-8));
 }
 
 .tabs {
@@ -115,9 +146,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: min(100%, var(--app-max-width));
-  padding: var(--s-2) var(--s-2) calc(var(--s-2) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   background: var(--bg-veil);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   border-top: 1px solid var(--line);
 }
 
@@ -126,43 +157,55 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: var(--s-2) 0;
-  border-radius: var(--radius-md);
+  justify-content: center;
+  gap: 3px;
+  height: var(--tabbar-h);
   color: var(--ink-muted);
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  transition: color 120ms ease;
 }
 
 .tab:hover {
-  text-decoration: none;
   color: var(--ink-soft);
 }
 
-.tab span[aria-hidden] {
-  font-size: 1.125rem;
+.tabIcon {
+  font-size: 1.0625rem;
   line-height: 1;
 }
 
 .tabActive {
-  color: var(--accent-strong);
-  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+/* The active tab is marked by a rule at the top edge, matching the hairline
+   language of the rest of the chrome instead of a filled pill. */
+.tabActive::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 2px;
+  background: var(--ink);
 }
 
 .badge {
   position: absolute;
-  top: 2px;
-  right: 50%;
-  transform: translateX(22px);
-  min-width: 17px;
-  height: 17px;
+  top: 8px;
+  left: 50%;
+  margin-left: 6px;
+  min-width: 16px;
+  height: 16px;
   padding: 0 4px;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--accent-ink);
+  border-radius: var(--r-full);
+  background: var(--ink);
+  color: var(--bg);
   font-size: 0.625rem;
   font-weight: 700;
-  line-height: 17px;
+  font-variant-numeric: tabular-nums;
+  line-height: 16px;
   text-align: center;
 }

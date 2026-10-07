@@ -1,4 +1,69 @@
+/*
+ * Mesa design system.
+ *
+ * One idea runs through it: the interface is monochrome, and saturated colour
+ * only ever means a person. Chrome is a neutral grey scale with crisp hairline
+ * borders; the only vivid colour on screen is a diner's identity, carried from
+ * their avatar to their chip on an item to the stripe on their share of the
+ * bill. That way colour is never decoration, it always answers "whose?".
+ */
+
 :root {
+  /* Neutral ramp. Everything structural is built from these. */
+  --n-0: #ffffff;
+  --n-50: #fafafa;
+  --n-100: #f4f4f5;
+  --n-200: #e9e9ec;
+  --n-300: #d9d9df;
+  --n-400: #b4b4bd;
+  --n-500: #8b8b96;
+  --n-600: #63636e;
+  --n-700: #44444d;
+  --n-800: #27272d;
+  --n-900: #18181c;
+  --n-950: #09090b;
+
+  --bg: var(--n-50);
+  --bg-veil: rgba(250, 250, 250, 0.88);
+  --surface: var(--n-0);
+  --surface-sunken: var(--n-100);
+  --line: var(--n-200);
+  --line-strong: var(--n-300);
+
+  --ink: var(--n-950);
+  --ink-soft: var(--n-700);
+  --ink-muted: var(--n-500);
+
+  /* Solid near-black primary action, the way an app button reads. */
+  --action: var(--n-950);
+  --action-ink: var(--n-0);
+  --action-hover: var(--n-800);
+
+  /* Focus is the one non-person colour, reserved so it never competes. */
+  --focus: #2563eb;
+
+  --warn: #92400e;
+  --warn-bg: #fef3c7;
+  --warn-line: #f59e0b;
+  --ok: #166534;
+  --ok-bg: #dcfce7;
+  --ok-line: #22c55e;
+  --danger: #b91c1c;
+
+  /* The palette of people. Six hues, far apart in both hue and lightness so
+     they stay distinguishable side by side and in common colour blindness. */
+  --diner-0: #e11d48;
+  --diner-1: #0891b2;
+  --diner-2: #7c3aed;
+  --diner-3: #c2410c;
+  --diner-4: #047857;
+  --diner-5: #a21caf;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-full: 999px;
+
   --s-1: 0.25rem;
   --s-2: 0.5rem;
   --s-3: 0.75rem;
@@ -9,48 +74,18 @@
   --s-8: 4rem;
   --s-9: 6rem;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
-  --radius-xl: 32px;
-  --radius-pill: 999px;
+  /* Shadows stay almost invisible: structure comes from hairlines, not depth.
+     Only what floats above the page (sheet, toast) gets a real shadow. */
+  --shadow-sm: 0 1px 2px rgba(9, 9, 11, 0.05);
+  --shadow-md: 0 4px 16px rgba(9, 9, 11, 0.09);
+  --shadow-lg: 0 16px 48px rgba(9, 9, 11, 0.22);
 
-  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
-  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --bg: #f7f4ee;
-  --bg-veil: rgba(247, 244, 238, 0.86);
-  --surface: #fffefb;
-  --surface-alt: #efe9de;
-  --ink: #1a1816;
-  --ink-soft: #46403a;
-  --ink-muted: #7a7065;
-  --line: #e2dace;
-  --line-strong: #c4b8a6;
-  --accent: #0f766e;
-  --accent-strong: #115e56;
-  --accent-soft: rgba(15, 118, 110, 0.1);
-  --accent-ink: #f0fdfa;
-  --warning: #b45309;
-  --warning-soft: rgba(180, 83, 9, 0.1);
-  --danger: #b91c1c;
-  --danger-soft: rgba(185, 28, 28, 0.08);
-  --success: #15803d;
-  --success-soft: rgba(21, 128, 61, 0.1);
-
-  --shadow-sm: 0 1px 2px rgba(26, 24, 22, 0.06);
-  --shadow-md: 0 10px 28px rgba(26, 24, 22, 0.1);
-  --shadow-lg: 0 28px 64px rgba(26, 24, 22, 0.16);
-
-  /* One stable colour per person at the table, picked by their join order. */
-  --diner-0: #0f766e;
-  --diner-1: #b45309;
-  --diner-2: #7c3aed;
-  --diner-3: #be123c;
-  --diner-4: #0369a1;
-  --diner-5: #4d7c0f;
-
+  /* The header the sticky sections and anchors have to clear. */
+  --header-h: 92px;
+  --tabbar-h: 60px;
   --app-max-width: 480px;
 
   color-scheme: light dark;
@@ -58,36 +93,41 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #121110;
-    --bg-veil: rgba(18, 17, 16, 0.86);
-    --surface: #1b1917;
-    --surface-alt: #252220;
-    --ink: #f3ece1;
-    --ink-soft: #d5cabb;
-    --ink-muted: #8b8075;
-    --line: #2b2724;
-    --line-strong: #453e38;
-    --accent: #2dd4bf;
-    --accent-strong: #5eead4;
-    --accent-soft: rgba(45, 212, 191, 0.14);
-    --accent-ink: #0b2b28;
-    --warning: #fbbf24;
-    --warning-soft: rgba(251, 191, 36, 0.14);
+    --bg: var(--n-950);
+    --bg-veil: rgba(9, 9, 11, 0.88);
+    --surface: #111114;
+    --surface-sunken: #17171b;
+    --line: #232329;
+    --line-strong: #32323a;
+
+    --ink: var(--n-50);
+    --ink-soft: var(--n-300);
+    --ink-muted: var(--n-500);
+
+    --action: var(--n-50);
+    --action-ink: var(--n-950);
+    --action-hover: var(--n-0);
+
+    --focus: #60a5fa;
+
+    --warn: #fcd34d;
+    --warn-bg: rgba(245, 158, 11, 0.14);
+    --warn-line: #f59e0b;
+    --ok: #4ade80;
+    --ok-bg: rgba(34, 197, 94, 0.14);
+    --ok-line: #22c55e;
     --danger: #f87171;
-    --danger-soft: rgba(248, 113, 113, 0.12);
-    --success: #4ade80;
-    --success-soft: rgba(74, 222, 128, 0.12);
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.55);
-    --shadow-lg: 0 28px 64px rgba(0, 0, 0, 0.7);
+    --diner-0: #fb7185;
+    --diner-1: #22d3ee;
+    --diner-2: #a78bfa;
+    --diner-3: #fb923c;
+    --diner-4: #34d399;
+    --diner-5: #e879f9;
 
-    --diner-0: #2dd4bf;
-    --diner-1: #fbbf24;
-    --diner-2: #c4b5fd;
-    --diner-3: #fda4af;
-    --diner-4: #7dd3fc;
-    --diner-5: #bef264;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -95,6 +135,13 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  /* No double tap zoom delay, and no grey flash on tap: every interactive
+     element below declares its own pressed state instead. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -106,13 +153,14 @@ body,
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font);
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11';
 }
 
 h1,
@@ -120,20 +168,23 @@ h2,
 h3,
 h4 {
   margin: 0 0 var(--s-3);
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.015em;
+  font-weight: 650;
+  letter-spacing: -0.021em;
+  /* Headings never leave a single word stranded on the last line. */
+  text-wrap: balance;
+  /* A heading jumped to by an anchor clears the sticky header. */
+  scroll-margin-top: calc(var(--header-h) + var(--s-4));
 }
 
-h1,
-h2 {
-  font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.025em;
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.028em;
 }
 
 p {
   margin: 0 0 var(--s-3);
+  text-wrap: pretty;
 }
 
 button {
@@ -149,28 +200,47 @@ textarea {
 }
 
 a {
-  color: var(--accent-strong);
+  color: var(--ink);
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
+/* One focus ring for the whole app, only for keyboard users, and always
+   visible because nothing is allowed to remove it without a replacement. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
+  border-radius: var(--r-sm);
 }
 
 ::selection {
-  background: var(--accent-soft);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Jumps a keyboard or screen reader user straight past the header chrome. */
+.skipLink {
+  position: absolute;
+  left: var(--s-3);
+  top: var(--s-3);
+  z-index: 100;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--action);
+  color: var(--action-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 160ms ease;
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
 }
 
 @keyframes riseIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;

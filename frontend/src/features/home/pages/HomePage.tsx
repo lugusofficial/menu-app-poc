@@ -30,17 +30,17 @@ export function HomePage() {
 
       <section className={styles.features}>
         <article className={styles.feature}>
-          <span aria-hidden="true">📷</span>
+          <span className={styles.featureIcon} aria-hidden="true">📷</span>
           <h3>{t('home.features.scanTitle')}</h3>
           <p>{t('home.features.scanBody')}</p>
         </article>
         <article className={styles.feature}>
-          <span aria-hidden="true">🧾</span>
+          <span className={styles.featureIcon} aria-hidden="true">🧾</span>
           <h3>{t('home.features.orderTitle')}</h3>
           <p>{t('home.features.orderBody')}</p>
         </article>
         <article className={styles.feature}>
-          <span aria-hidden="true">🤝</span>
+          <span className={styles.featureIcon} aria-hidden="true">🤝</span>
           <h3>{t('home.features.splitTitle')}</h3>
           <p>{t('home.features.splitBody')}</p>
         </article>

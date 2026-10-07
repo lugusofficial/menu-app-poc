@@ -190,6 +190,32 @@ describe('setQuantity and removeLine', () => {
   })
 })
 
+describe('restoreLine', () => {
+  it('puts a removed line back with the people who were sharing it', () => {
+    const start = apply(newSession(), join('d1', 'Ana'), join('d2', 'Bruno'), add('l1', 'd1'))
+    const removed = sessionReducer(start, { type: 'removeLine', lineId: 'l1' })
+    const restored = sessionReducer(removed, {
+      type: 'restoreLine',
+      line: start.lines[0],
+      sharedBy: ['d1', 'd2'],
+    })
+
+    expect(restored.lines).toHaveLength(1)
+    expect(restored.lines[0].lineId).toBe('l1')
+    expect(restored.assignments['l1']).toEqual(['d1', 'd2'])
+  })
+
+  it('does nothing when that line is already back', () => {
+    const start = apply(newSession(), join('d1', 'Ana'), add('l1', 'd1'))
+    const again = sessionReducer(start, {
+      type: 'restoreLine',
+      line: start.lines[0],
+      sharedBy: ['d1'],
+    })
+    expect(again).toBe(start)
+  })
+})
+
 describe('placeOrder', () => {
   it('marks every cart line as placed and stamps the time', () => {
     const state = apply(newSession(), join('d1', 'Ana'), add('l1', 'd1'), {

@@ -35,6 +35,26 @@ The split is the point, so it is the part that is most carefully built:
 - `src/features/bill/split.ts` is pure and has no React in it. It is covered by
   its own test suite, including the cases where the cents do not divide.
 
+## Design
+
+The interface is monochrome, and saturated colour only ever means a person. The
+chrome is a neutral grey ramp with hairline borders, small radii and Inter with
+tabular numerals; the only vivid colour on screen is a diner's identity, carried
+from their avatar to their chip on an item to the stripe down their share of the
+bill. Colour is never decoration here — it always answers "whose?", which is the
+one question the app exists to settle. Tokens live in
+`src/shared/styles/global.css`; light and dark are both first class.
+
+The UI follows Vercel's [Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines).
+Among the things that come from it: view state lives in the URL (`?split=byItem`,
+`?q=risoto`) so a split or a filtered menu can be sent to the person across the
+table; removing an item is undoable from the toast rather than silent; navigation
+is `<a>`/`<Link>` so middle click and open-in-new-tab work; every control is at
+least 44px tall with a visible `:focus-visible` ring; inputs carry `name`,
+`autocomplete`, `inputmode` and example-shaped placeholders; async changes land in
+a polite live region; and amounts go through `Intl.NumberFormat`, never a
+hardcoded format.
+
 ## Running it
 
 ```bash

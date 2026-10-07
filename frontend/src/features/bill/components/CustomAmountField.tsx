@@ -46,8 +46,13 @@ export function CustomAmountField({
       </label>
       <input
         id={id}
+        name={id}
+        type="text"
         className={styles.input}
+        // `decimal` rather than `numeric`: the keypad has to offer a comma.
         inputMode="decimal"
+        autoComplete="off"
+        spellCheck={false}
         value={draft}
         onChange={(event) => change(event.target.value)}
         onBlur={() => setDraft(centsToText(parseCents(draft) ?? 0))}

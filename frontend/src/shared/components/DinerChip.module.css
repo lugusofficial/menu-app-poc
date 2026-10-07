@@ -3,39 +3,69 @@
   align-items: center;
   justify-content: center;
   flex: none;
-  border-radius: 50%;
+  border-radius: var(--r-full);
   color: #fff;
   font-weight: 700;
   line-height: 1;
+  letter-spacing: 0;
 }
 
 .md {
-  width: 30px;
-  height: 30px;
-  font-size: 0.8125rem;
+  width: 28px;
+  height: 28px;
+  font-size: 0.75rem;
 }
 
 .sm {
-  width: 22px;
-  height: 22px;
-  font-size: 0.6875rem;
+  width: 20px;
+  height: 20px;
+  font-size: 0.625rem;
 }
 
+/*
+ * Saying who had an item. Off, it is a plain hairline chip; on, it floods with
+ * that person's colour, so a glance down the list answers "whose?" without
+ * reading a single name.
+ */
 .toggle {
-  padding: 0.3rem 0.75rem;
-  border: 1.5px solid var(--line-strong);
-  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  /* 36px tall, inside a 44px row, keeps the tap target honest on a phone. */
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-full);
   background: var(--surface);
   color: var(--ink-soft);
   font-size: 0.8125rem;
   font-weight: 600;
-  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 
 .toggle:hover {
-  border-color: var(--ink-soft);
+  border-color: var(--ink-muted);
+  color: var(--ink);
 }
 
 .toggleOn {
   color: #fff;
+  font-weight: 650;
+}
+
+.toggleOn:hover {
+  /* Already saturated: darken by the border only, never lose the identity. */
+  color: #fff;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.toggleOn .dot {
+  opacity: 1;
 }

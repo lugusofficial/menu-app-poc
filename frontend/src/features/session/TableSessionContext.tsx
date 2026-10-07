@@ -4,7 +4,7 @@ import type { MenuItem } from '../menu/types'
 import { sessionReducer } from './sessionReducer'
 import type { SessionAction } from './sessionReducer'
 import { loadSession, saveSession, sessionKey } from './storage'
-import type { Diner, OrderLine, SplitMode, TableSession } from './types'
+import type { Diner, OrderLine, TableSession } from './types'
 
 type TableSessionContextValue = {
   session: TableSession
@@ -16,7 +16,6 @@ type TableSessionContextValue = {
   joinTable: (name: string) => void
   addItem: (item: MenuItem, quantity: number, notes: string) => void
   placeOrder: () => void
-  setSplitMode: (mode: SplitMode) => void
 }
 
 const TableSessionContext = createContext<TableSessionContextValue | null>(null)
@@ -95,10 +94,6 @@ export function TableSessionProvider({
     dispatch({ type: 'placeOrder', placedAt: new Date().toISOString() })
   }, [])
 
-  const setSplitMode = useCallback((mode: SplitMode) => {
-    dispatch({ type: 'setSplitMode', mode })
-  }, [])
-
   const value = useMemo(
     () => ({
       session,
@@ -110,7 +105,6 @@ export function TableSessionProvider({
       joinTable,
       addItem,
       placeOrder,
-      setSplitMode,
     }),
     [
       session,
@@ -121,7 +115,6 @@ export function TableSessionProvider({
       joinTable,
       addItem,
       placeOrder,
-      setSplitMode,
     ],
   )
 

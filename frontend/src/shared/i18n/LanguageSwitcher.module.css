@@ -1,21 +1,28 @@
 .group {
   display: inline-flex;
+  flex: none;
   padding: 2px;
   border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  background: var(--surface-alt);
+  border-radius: var(--r-sm);
+  background: var(--surface-sunken);
 }
 
 .button {
-  padding: 0.125rem 0.5rem;
+  min-width: 30px;
+  min-height: 26px;
+  padding: 0 var(--s-2);
   border: none;
-  border-radius: var(--radius-pill);
+  border-radius: 4px;
   background: transparent;
   color: var(--ink-muted);
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  transition: background 140ms ease, color 140ms ease;
+  letter-spacing: 0.04em;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.button:hover {
+  color: var(--ink);
 }
 
 .active {

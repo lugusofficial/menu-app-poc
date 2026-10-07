@@ -114,6 +114,26 @@ test.describe('splitting the bill', () => {
     await expect(shareOf(page, 'Ana')).toContainText('Pago')
   })
 
+  test('puts the chosen split in the URL, so it can be sent to someone', async ({ page }) => {
+    await tableForTwo(page)
+    await page.getByRole('tab', { name: 'Por item' }).click()
+    await expect(page).toHaveURL(/[?&]split=byItem/)
+
+    await page.getByRole('tab', { name: 'Por igual' }).click()
+    await expect(page).not.toHaveURL(/split=/)
+  })
+
+  test('opens straight on the split named in a shared link', async ({ page }) => {
+    await tableForTwo(page)
+    await page.goto('t/cantina-do-porto/12/bill?split=byItem')
+
+    await expect(page.getByRole('tab', { name: 'Por item' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    await expect(shareOf(page, 'Ana')).toContainText('R$ 141,90')
+  })
+
   test('keeps the chosen split across a reload', async ({ page }) => {
     await tableForTwo(page)
     await page.getByRole('tab', { name: 'Por item' }).click()
