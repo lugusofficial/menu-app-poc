@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useTableContext } from '../../../app/tableContext'
 import { useTableSession } from '../../session/TableSessionContext'
 import type { SplitMode } from '../../session/types'
+import { DishImage } from '../../menu/components/DishImage'
 import { DinerAvatar, DinerToggle } from '../../../shared/components/DinerChip'
 import { useToast } from '../../../shared/components/Toast'
 import { dinerColor } from '../../../shared/lib/dinerColor'
@@ -123,8 +124,9 @@ export function BillPage() {
               return (
                 <li key={line.lineId} className={styles.assignLine}>
                   <div className={styles.assignHead}>
+                    <DishImage image={line.image} emoji={line.emoji} size="thumb" />
                     <span className={styles.assignName}>
-                      <span aria-hidden="true">{line.emoji}</span> {line.name}
+                      {line.name}
                       {line.quantity > 1 && <span className={styles.qty}> ×{line.quantity}</span>}
                     </span>
                     <span className={styles.assignPrice}>{money(lineTotalCents(line))}</span>

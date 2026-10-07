@@ -12,6 +12,7 @@ export type OrderLine = {
   itemId: string
   name: string
   emoji: string
+  image: string | null
   unitPriceCents: number
   quantity: number
   notes: string

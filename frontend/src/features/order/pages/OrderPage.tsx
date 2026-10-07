@@ -4,6 +4,7 @@ import { useTableContext } from '../../../app/tableContext'
 import { useTableSession } from '../../session/TableSessionContext'
 import type { OrderLine } from '../../session/types'
 import { lineTotalCents, subtotalOf } from '../../bill/split'
+import { DishImage } from '../../menu/components/DishImage'
 import { DinerAvatar } from '../../../shared/components/DinerChip'
 import { useToast } from '../../../shared/components/Toast'
 import { formatCents, percentOfCents } from '../../../shared/lib/money'
@@ -62,9 +63,7 @@ export function OrderPage() {
 
   const renderLine = (line: OrderLine, editable: boolean) => (
     <li key={line.lineId} className={styles.line}>
-      <span className={styles.lineEmoji} aria-hidden="true">
-        {line.emoji}
-      </span>
+      <DishImage image={line.image} emoji={line.emoji} size="thumb" />
       <span className={styles.lineBody}>
         <span className={styles.lineName}>{line.name}</span>
         {line.notes !== '' && <span className={styles.lineNotes}>{line.notes}</span>}

@@ -55,6 +55,26 @@ least 44px tall with a visible `:focus-visible` ring; inputs carry `name`,
 a polite live region; and amounts go through `Intl.NumberFormat`, never a
 hardcoded format.
 
+## Photos
+
+Each dish has a real photograph rather than an emoji. They come from Wikimedia
+Commons under licences that allow commercial use (CC0, CC BY, CC BY-SA, public
+domain), were each checked by eye against the dish, cropped and re-encoded as
+WebP in two sizes: a 320px square for the menu row and a 720x480 hero for the
+item sheet. All 36 files together are about 800 KB, and every one is lazy loaded
+below the fold with explicit width and height so nothing reflows as they arrive.
+
+Credits are in [CREDITS.md](CREDITS.md) and are also shown in the app, at the
+bottom of the home page, because CC BY and CC BY-SA require it. **The photos keep
+their own licences, which are not the licence of the code.** A dish with no photo
+falls back to its emoji, as does one whose file fails to load.
+
+One honest note: the menu is fictional, and in one case the dish was written to
+match the photography rather than the other way round. The only correct photos of
+pumpkin ravioli on Commons were of raw dough, so that item became ricotta and
+spinach ravioli, which has an accurate plated photo. Showing the right picture
+mattered more than keeping an invented menu line.
+
 ## Running it
 
 ```bash

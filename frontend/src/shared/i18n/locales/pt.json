@@ -30,7 +30,10 @@
       "orderBody": "Cada pessoa entra na mesa com seu nome e adiciona o que quiser.",
       "splitTitle": "A conta divide sozinha",
       "splitBody": "Por igual, por item consumido ou em valores escolhidos. Sempre fecha no centavo."
-    }
+    },
+    "photosTitle": "Sobre as fotos",
+    "photosBody": "As fotos dos pratos vêm do Wikimedia Commons, sob licenças que permitem uso comercial. Foram cortadas e redimensionadas.",
+    "photosBy": "por"
   },
   "join": {
     "title": "Bem-vindo à {{venue}}",

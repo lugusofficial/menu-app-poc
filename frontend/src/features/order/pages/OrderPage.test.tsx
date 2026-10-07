@@ -16,6 +16,7 @@ function line(overrides: Partial<OrderLine> = {}): OrderLine {
     itemId: 'chopp',
     name: 'Chopp pilsen 300ml',
     emoji: '🍺',
+    image: null,
     unitPriceCents: 1600,
     quantity: 1,
     notes: '',

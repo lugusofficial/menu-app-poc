@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { formatCents } from '../../../shared/lib/money'
 import type { MenuItem } from '../types'
+import { DishImage } from './DishImage'
 import styles from './ItemSheet.module.css'
 
 /** The bottom sheet that opens when a diner taps a dish. */
@@ -57,9 +58,7 @@ export function ItemSheet({
           <span aria-hidden="true">✕</span>
         </button>
 
-        <span className={styles.emoji} aria-hidden="true">
-          {item.emoji}
-        </span>
+        <DishImage image={item.image} emoji={item.emoji} size="hero" eager />
         <h2 className={styles.name}>{item.name}</h2>
         <p className={styles.description}>{item.description}</p>
         <p className={styles.price}>{formatCents(item.priceCents, locale, currency)}</p>

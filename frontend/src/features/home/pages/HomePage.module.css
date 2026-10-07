@@ -160,3 +160,36 @@
   font-size: 0.6875rem;
   text-align: center;
 }
+
+/* Attribution for the dish photos. Collapsed by default because it is a legal
+   obligation, not something a diner came here to read. */
+.credits {
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+}
+
+.credits summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.creditsBody {
+  margin-top: var(--s-3);
+  max-width: 60ch;
+}
+
+.creditsList {
+  margin: 0;
+  padding-left: var(--s-4);
+  line-height: 1.6;
+}
+
+.creditsList a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

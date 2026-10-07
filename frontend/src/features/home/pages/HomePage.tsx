@@ -5,6 +5,7 @@ import { menuApi } from '../../menu/api'
 import { useAsync } from '../../../shared/lib/useAsync'
 import { LanguageSwitcher } from '../../../shared/i18n/LanguageSwitcher'
 import { APP_VERSION } from '../../../version'
+import { PHOTO_CREDITS } from '../../menu/photoCredits'
 import { TableQrCode } from '../components/TableQrCode'
 import styles from './HomePage.module.css'
 
@@ -77,6 +78,24 @@ export function HomePage() {
           </ul>
         )}
       </section>
+
+      <details className={styles.credits}>
+        <summary>{t('home.photosTitle')}</summary>
+        <p className={styles.creditsBody}>{t('home.photosBody')}</p>
+        <ul className={styles.creditsList}>
+          {PHOTO_CREDITS.map((credit) => (
+            <li key={credit.itemId}>
+              <a href={credit.source} target="_blank" rel="noreferrer noopener">
+                {credit.title}
+              </a>{' '}
+              {t('home.photosBy')} {credit.creator || '—'} ·{' '}
+              <a href={credit.licenseUrl} target="_blank" rel="noreferrer noopener">
+                {credit.license}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
 
       <footer className={styles.footer}>
         <span>{APP_VERSION}</span>

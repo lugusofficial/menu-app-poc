@@ -15,6 +15,7 @@ function line(lineId: string, unitPriceCents: number, quantity = 1, addedBy = 'd
     itemId: `item-${lineId}`,
     name: `Item ${lineId}`,
     emoji: '🍽️',
+    image: null,
     unitPriceCents,
     quantity,
     notes: '',

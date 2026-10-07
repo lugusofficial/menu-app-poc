@@ -137,12 +137,12 @@
 
 .assignHead {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: var(--s-3);
 }
 
 .assignName {
+  flex: 1;
   min-width: 0;
   font-weight: 600;
   line-height: 1.3;

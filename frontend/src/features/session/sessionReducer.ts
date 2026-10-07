@@ -74,6 +74,7 @@ export function sessionReducer(state: TableSession, action: SessionAction): Tabl
         itemId: action.item.itemId,
         name: action.item.name,
         emoji: action.item.emoji,
+        image: action.item.image,
         unitPriceCents: action.item.priceCents,
         quantity: action.quantity,
         notes,

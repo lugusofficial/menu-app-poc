@@ -7,6 +7,11 @@ export type MenuItem = {
   description: string
   priceCents: number
   emoji: string
+  /**
+   * Base name of the dish photo under `public/dishes`, or null when there is
+   * none: the card then falls back to the emoji rather than a broken frame.
+   */
+  image: string | null
   tags: MenuTag[]
   available: boolean
 }

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { formatCents } from '../../../shared/lib/money'
 import type { MenuItem } from '../types'
+import { DishImage } from './DishImage'
 import styles from './MenuItemCard.module.css'
 
 export function MenuItemCard({
@@ -23,9 +24,7 @@ export function MenuItemCard({
       onClick={() => onSelect(item)}
       disabled={!item.available}
     >
-      <span className={styles.emoji} aria-hidden="true">
-        {item.emoji}
-      </span>
+      <DishImage image={item.image} emoji={item.emoji} size="thumb" />
       <span className={styles.body}>
         <span className={styles.name}>{item.name}</span>
         <span className={styles.description}>{item.description}</span>

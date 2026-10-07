@@ -1,0 +1,44 @@
+.image {
+  display: block;
+  flex: none;
+  object-fit: cover;
+  background: var(--surface-sunken);
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-sm);
+}
+
+.hero {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--r-md);
+}
+
+/* The emoji stand-in keeps the same box, so a missing photo does not change
+   the shape of the row. */
+.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: var(--r-sm);
+  background: var(--surface-sunken);
+}
+
+.fallback.thumb {
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.fallback.hero {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--r-md);
+  font-size: 2.5rem;
+}

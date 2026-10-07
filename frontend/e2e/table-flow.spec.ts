@@ -77,6 +77,30 @@ test.describe('scanning a table and ordering', () => {
     await expect(page.getByText('R$ 32,00').first()).toBeVisible()
   })
 
+  test('the menu shows a real photo for each dish', async ({ page }) => {
+    await joinTable(page, 'Ana')
+    const photo = page.locator('img[src*="/dishes/ancho-thumb.webp"]')
+
+    // The thumbnails are lazy, so the file is only fetched once the row is
+    // scrolled to. That is the behaviour under test as much as the photo is.
+    await photo.scrollIntoViewIfNeeded()
+    await expect(photo).toBeVisible()
+    // A missing file would still render an <img>, so check the bytes arrived.
+    await expect
+      .poll(() => photo.evaluate((img: HTMLImageElement) => img.naturalWidth))
+      .toBeGreaterThan(0)
+  })
+
+  test('the item sheet leads with the dish photo', async ({ page }) => {
+    await joinTable(page, 'Ana')
+    await page.getByRole('button', { name: /Bife ancho 300g/ }).first().click()
+    const hero = page.getByRole('dialog').locator('img[src*="/dishes/ancho.webp"]')
+    await expect(hero).toBeVisible()
+    await expect
+      .poll(() => hero.evaluate((img: HTMLImageElement) => img.naturalWidth))
+      .toBeGreaterThan(0)
+  })
+
   test('the menu search goes into the URL', async ({ page }) => {
     await joinTable(page, 'Ana')
     await page.getByLabel('Buscar no cardápio').fill('ragu')

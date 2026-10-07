@@ -30,7 +30,10 @@
       "orderBody": "Each person joins the table with their name and adds what they want.",
       "splitTitle": "The bill splits itself",
       "splitBody": "Evenly, by what each person had, or by amounts you choose. It always adds up to the cent."
-    }
+    },
+    "photosTitle": "About the photos",
+    "photosBody": "The dish photos come from Wikimedia Commons under licences that allow commercial use. They were cropped and resized.",
+    "photosBy": "by"
   },
   "join": {
     "title": "Welcome to {{venue}}",

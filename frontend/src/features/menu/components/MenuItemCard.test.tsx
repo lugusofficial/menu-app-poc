@@ -12,6 +12,7 @@ const ITEM: MenuItem = {
   description: 'Grelhado na brasa, batata rustica e chimichurri.',
   priceCents: 12900,
   emoji: '🥩',
+  image: null,
   tags: ['popular'],
   available: true,
 }

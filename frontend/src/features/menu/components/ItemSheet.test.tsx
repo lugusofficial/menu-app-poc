@@ -12,6 +12,7 @@ const ITEM: MenuItem = {
   description: 'Puro malte, bem gelado.',
   priceCents: 1600,
   emoji: '🍺',
+  image: null,
   tags: [],
   available: true,
 }

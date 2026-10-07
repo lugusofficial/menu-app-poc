@@ -14,6 +14,7 @@ const CHOPP: MenuItem = {
   description: '',
   priceCents: 1600,
   emoji: '🍺',
+  image: null,
   tags: [],
   available: true,
 }

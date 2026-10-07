@@ -59,13 +59,8 @@
   color: var(--ink);
 }
 
-.emoji {
-  font-size: 1.75rem;
-  line-height: 1;
-}
-
 .name {
-  margin: var(--s-2) 0 var(--s-1);
+  margin: var(--s-4) 0 var(--s-1);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.025em;
