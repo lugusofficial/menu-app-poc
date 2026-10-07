@@ -11,7 +11,8 @@
     "remove": "Remover",
     "language": "Idioma",
     "skipToContent": "Ir para o conteúdo",
-    "undo": "Desfazer"
+    "undo": "Desfazer",
+    "done": "Pronto"
   },
   "home": {
     "eyebrow": "Protótipo",
@@ -72,7 +73,9 @@
     "decrease": "Diminuir quantidade",
     "increase": "Aumentar quantidade",
     "addFor": "Adicionar · {{total}}",
-    "addedToast": "{{name}} adicionado ao pedido"
+    "addedToast": "{{name}} adicionado ao pedido",
+    "forWhom": "Para quem?",
+    "addedForToast": "{{name}} para {{diner}}"
   },
   "order": {
     "title": "Pedido da mesa",
@@ -137,5 +140,16 @@
     "title": "Página não encontrada",
     "body": "O endereço não existe ou a mesa já foi fechada.",
     "home": "Ir para o início"
+  },
+  "people": {
+    "title": "Quem está na mesa",
+    "hint": "Um celular só dá conta da mesa inteira. Adicione quem não vai escanear o QR code e depois escolha de quem é cada item.",
+    "addLabel": "Adicionar alguém",
+    "add": "Adicionar",
+    "addSomeone": "Adicionar quem está com você",
+    "setAsMe": "Sou eu",
+    "remove": "Tirar {{name}} da mesa",
+    "cannotRemoveSelf": "Você não pode se tirar da mesa",
+    "cannotRemoveOrdered": "Já tem item no pedido desta pessoa"
   }
 }

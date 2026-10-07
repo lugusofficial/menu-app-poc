@@ -6,6 +6,8 @@ import type { Diner, OrderLine, TableSession } from './types'
 // can fix them and two phones at the same table stay comparable.
 export type SessionAction =
   | { type: 'joinDiner'; dinerId: string; name: string; joinedAt: string }
+  | { type: 'addDiner'; dinerId: string; name: string; joinedAt: string }
+  | { type: 'removeDiner'; dinerId: string }
   | { type: 'switchDiner'; dinerId: string }
   | {
       type: 'addLine'
@@ -28,18 +30,32 @@ export type SessionAction =
 
 export function sessionReducer(state: TableSession, action: SessionAction): TableSession {
   switch (action.type) {
-    case 'joinDiner': {
-      const name = action.name.trim()
-      if (name === '') return state
-      const existing = state.diners.find((d) => sameName(d.name, name))
-      if (existing) return { ...state, currentDinerId: existing.dinerId }
-      const diner: Diner = {
-        dinerId: action.dinerId,
-        name,
-        colorIndex: state.diners.length,
-        joinedAt: action.joinedAt,
+    // Joining is this phone saying who is holding it. Adding is that person
+    // putting someone else at the table, which must not change who they are:
+    // one phone often orders for a whole table.
+    case 'joinDiner':
+      return seat(state, action, true)
+
+    case 'addDiner':
+      return seat(state, action, false)
+
+    case 'removeDiner': {
+      if (!canRemoveDiner(state, action.dinerId)) return state
+      const assignments = Object.fromEntries(
+        Object.entries(state.assignments).map(([lineId, ids]) => [
+          lineId,
+          ids.filter((id) => id !== action.dinerId),
+        ]),
+      )
+      const customAmounts = { ...state.customAmounts }
+      delete customAmounts[action.dinerId]
+      return {
+        ...state,
+        diners: state.diners.filter((d) => d.dinerId !== action.dinerId),
+        assignments,
+        customAmounts,
+        paidDinerIds: state.paidDinerIds.filter((id) => id !== action.dinerId),
       }
-      return { ...state, diners: [...state.diners, diner], currentDinerId: diner.dinerId }
     }
 
     case 'switchDiner': {
@@ -169,6 +185,52 @@ export function sessionReducer(state: TableSession, action: SessionAction): Tabl
     case 'reset':
       return emptySession(state.venueSlug, state.tableId)
   }
+}
+
+function seat(
+  state: TableSession,
+  action: { dinerId: string; name: string; joinedAt: string },
+  becomeCurrent: boolean,
+): TableSession {
+  const name = action.name.trim()
+  if (name === '') return state
+
+  // Someone already at the table under that name is that same person, not a
+  // second one: two "Ana" rows would make the bill meaningless.
+  const existing = state.diners.find((d) => sameName(d.name, name))
+  if (existing) {
+    return becomeCurrent ? { ...state, currentDinerId: existing.dinerId } : state
+  }
+
+  const diner: Diner = {
+    dinerId: action.dinerId,
+    name,
+    colorIndex: nextColorIndex(state),
+    joinedAt: action.joinedAt,
+  }
+  return {
+    ...state,
+    diners: [...state.diners, diner],
+    currentDinerId: becomeCurrent ? diner.dinerId : state.currentDinerId,
+  }
+}
+
+/** The lowest colour nobody is using, so a removal frees its colour again. */
+function nextColorIndex(state: TableSession): number {
+  const taken = new Set(state.diners.map((d) => d.colorIndex))
+  let index = 0
+  while (taken.has(index)) index += 1
+  return index
+}
+
+/**
+ * Whether a diner can be taken off the table. Someone who ordered cannot: their
+ * items would be left with nobody to pay for them. Nor can the person holding
+ * the phone remove themselves.
+ */
+export function canRemoveDiner(state: TableSession, dinerId: string): boolean {
+  if (state.currentDinerId === dinerId) return false
+  return !state.lines.some((line) => line.addedByDinerId === dinerId)
 }
 
 function sameName(a: string, b: string): boolean {

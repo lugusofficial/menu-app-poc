@@ -20,6 +20,8 @@ second phone.
 |---|---|
 | Scan a table | `/t/:venueSlug/:tableId` is the QR target. The home page prints a working QR code for each demo table. |
 | Join | Each person enters a name. Items are then attributed to whoever added them. |
+| One phone for the table | Not everyone will scan. Whoever did can add the others from the header, several in a row, without handing over the phone or changing who they are. |
+| Order for someone else | With more than one person at the table, the item sheet asks who it is for, so one phone orders for everybody and the bill already knows whose each item is. |
 | Order | Browse by category or search, set quantity and a note, send the order to the kitchen. |
 | Split evenly | The whole bill divided by the number of people. |
 | Split by item | Tap who had each dish. A dish tapped by two people is split between them. |
@@ -32,6 +34,9 @@ The split is the point, so it is the part that is most carefully built:
 - A share that does not divide evenly is settled with the largest remainder, so
   the shares always add back up to the bill, to the cent.
 - Food nobody has claimed is reported, never silently absorbed into someone's share.
+- Someone who has already ordered cannot be taken off the table, and nor can the
+  person holding the phone remove themselves: either would leave items with
+  nobody to pay for them.
 - `src/features/bill/split.ts` is pure and has no React in it. It is covered by
   its own test suite, including the cases where the cents do not divide.
 

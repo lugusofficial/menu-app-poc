@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
-import { addDish, joinTable, switchTo, tabLink } from './helpers'
+import { addDish, addDishFor, joinTable, switchTo, tabLink } from './helpers'
 
 // Intl puts a non breaking space after "R$", so a regex matching a formatted
 // amount uses \s, never a plain space. String matchers normalise it already.
@@ -25,6 +25,54 @@ function shareOf(page: Page, name: string) {
 function itemRow(page: Page, dish: string) {
   return page.getByRole('list', { name: 'Itens da conta' }).getByRole('listitem').filter({ hasText: dish })
 }
+
+test.describe('one phone for the whole table', () => {
+  test('adds the people who did not scan, orders for them and splits by item', async ({ page }) => {
+    await joinTable(page, 'Ana')
+
+    // Ana is the only one who scanned. She puts the other two at the table.
+    await page.getByRole('button', { name: /Adicionar quem está com você/ }).click()
+    const sheet = page.getByRole('dialog', { name: 'Quem está na mesa' })
+    for (const name of ['Bruno', 'Caio']) {
+      await sheet.getByLabel('Adicionar alguém').fill(name)
+      await sheet.getByRole('button', { name: 'Adicionar', exact: true }).click()
+    }
+    await expect(sheet.getByRole('listitem')).toHaveCount(3)
+    await sheet.getByRole('button', { name: 'Pronto' }).click()
+
+    // She is still the one holding the phone.
+    await expect(page.getByText('3 pessoas na mesa')).toBeVisible()
+
+    // One dish each, ordered from the same phone.
+    await addDishFor(page, 'Bife ancho 300g', null)
+    await addDishFor(page, 'Risoto de cogumelos', 'Bruno')
+    await addDishFor(page, 'Chopp pilsen 300ml', 'Caio')
+
+    await tabLink(page, 'Pedido').click()
+    await expect(page.getByText('Pedido por Ana')).toBeVisible()
+    await expect(page.getByText('Pedido por Bruno')).toBeVisible()
+    await expect(page.getByText('Pedido por Caio')).toBeVisible()
+
+    // Each item is already attributed, so by-item needs no extra tapping.
+    await page.goto('t/cantina-do-porto/12/bill?split=byItem')
+    await expect(shareOf(page, 'Ana')).toContainText('R$ 141,90')
+    await expect(shareOf(page, 'Bruno')).toContainText('R$ 94,60')
+    await expect(shareOf(page, 'Caio')).toContainText('R$ 17,60')
+    await expect(page.getByText('A conta fecha certinho')).toBeVisible()
+  })
+
+  test('a person who has not ordered can be taken back off', async ({ page }) => {
+    await joinTable(page, 'Ana')
+    await page.getByRole('button', { name: /Adicionar quem está com você/ }).click()
+    const sheet = page.getByRole('dialog', { name: 'Quem está na mesa' })
+    await sheet.getByLabel('Adicionar alguém').fill('Engano')
+    await sheet.getByRole('button', { name: 'Adicionar', exact: true }).click()
+    await expect(sheet.getByRole('listitem')).toHaveCount(2)
+
+    await sheet.getByRole('button', { name: 'Tirar Engano da mesa' }).click()
+    await expect(sheet.getByRole('listitem')).toHaveCount(1)
+  })
+})
 
 test.describe('splitting the bill', () => {
   test('splits the bill evenly between the table', async ({ page }) => {

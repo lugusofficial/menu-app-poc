@@ -14,7 +14,8 @@ type TableSessionContextValue = {
   placedLines: OrderLine[]
   cartQuantity: number
   joinTable: (name: string) => void
-  addItem: (item: MenuItem, quantity: number, notes: string) => void
+  addDiner: (name: string) => void
+  addItem: (item: MenuItem, quantity: number, notes: string, forDinerId?: string) => void
   placeOrder: () => void
 }
 
@@ -75,17 +76,18 @@ export function TableSessionProvider({
     dispatch({ type: 'joinDiner', dinerId: newId(), name, joinedAt: new Date().toISOString() })
   }, [])
 
+  /** Puts someone else at the table without changing who is holding the phone. */
+  const addDiner = useCallback((name: string) => {
+    dispatch({ type: 'addDiner', dinerId: newId(), name, joinedAt: new Date().toISOString() })
+  }, [])
+
   const addItem = useCallback(
-    (item: MenuItem, quantity: number, notes: string) => {
-      if (!session.currentDinerId) return
-      dispatch({
-        type: 'addLine',
-        lineId: newId(),
-        item,
-        quantity,
-        notes,
-        dinerId: session.currentDinerId,
-      })
+    (item: MenuItem, quantity: number, notes: string, forDinerId?: string) => {
+      // An item can be ordered on behalf of anyone at the table, which is how a
+      // single phone orders for someone who is not holding one.
+      const dinerId = forDinerId ?? session.currentDinerId
+      if (!dinerId) return
+      dispatch({ type: 'addLine', lineId: newId(), item, quantity, notes, dinerId })
     },
     [session.currentDinerId],
   )
@@ -103,6 +105,7 @@ export function TableSessionProvider({
       placedLines,
       cartQuantity,
       joinTable,
+      addDiner,
       addItem,
       placeOrder,
     }),
@@ -113,6 +116,7 @@ export function TableSessionProvider({
       placedLines,
       cartQuantity,
       joinTable,
+      addDiner,
       addItem,
       placeOrder,
     ],

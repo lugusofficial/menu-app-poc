@@ -89,6 +89,13 @@
   color: var(--ink-muted);
 }
 
+.people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+
 .textarea {
   width: 100%;
   padding: var(--s-3);

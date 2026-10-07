@@ -11,7 +11,8 @@
     "remove": "Remove",
     "language": "Language",
     "skipToContent": "Skip to content",
-    "undo": "Undo"
+    "undo": "Undo",
+    "done": "Done"
   },
   "home": {
     "eyebrow": "Prototype",
@@ -72,7 +73,9 @@
     "decrease": "Decrease quantity",
     "increase": "Increase quantity",
     "addFor": "Add · {{total}}",
-    "addedToast": "{{name}} added to the order"
+    "addedToast": "{{name}} added to the order",
+    "forWhom": "Who is it for?",
+    "addedForToast": "{{name}} for {{diner}}"
   },
   "order": {
     "title": "Table order",
@@ -137,5 +140,16 @@
     "title": "Page not found",
     "body": "This address does not exist, or the table has been closed.",
     "home": "Go to the start"
+  },
+  "people": {
+    "title": "Who is at the table",
+    "hint": "One phone can handle the whole table. Add whoever is not going to scan the QR code, then pick who each item is for.",
+    "addLabel": "Add someone",
+    "add": "Add",
+    "addSomeone": "Add whoever is with you",
+    "setAsMe": "This is me",
+    "remove": "Take {{name}} off the table",
+    "cannotRemoveSelf": "You cannot take yourself off the table",
+    "cannotRemoveOrdered": "This person already has an item on the order"
   }
 }

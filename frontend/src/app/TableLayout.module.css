@@ -99,7 +99,19 @@
   display: flex;
   align-items: center;
   gap: var(--s-2);
+  width: 100%;
   margin-top: var(--s-3);
+  padding: var(--s-1) var(--s-2) var(--s-1) var(--s-1);
+  border: 1px solid transparent;
+  border-radius: var(--r-full);
+  background: transparent;
+  text-align: left;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.diners:hover {
+  background: var(--surface-sunken);
+  border-color: var(--line);
 }
 
 .dinerStack {
@@ -121,6 +133,20 @@
    without a label taking up a line. */
 .dinerSelf {
   box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink);
+}
+
+.addSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px dashed var(--field-border);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .dinerCount {

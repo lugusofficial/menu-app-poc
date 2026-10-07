@@ -53,7 +53,9 @@ describe('App routing', () => {
 
     expect(await screen.findByRole('heading', { name: 'Menu', level: 1 })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Bill/ })).toBeInTheDocument()
-    expect(screen.getByText('1 person at the table')).toBeInTheDocument()
+    // Alone at the table, the header prompts instead of counting: one phone
+    // ordering for a group is the common case.
+    expect(screen.getByText('Add whoever is with you')).toBeInTheDocument()
   })
 
   it('walks from the menu to the order and on to the bill', async () => {

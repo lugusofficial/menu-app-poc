@@ -28,6 +28,18 @@ export async function addDish(page: Page, dish: string, quantity = 1) {
   await sheet.waitFor({ state: 'detached' })
 }
 
+/**
+ * Adds a dish, optionally on behalf of someone who is not holding the phone.
+ * Pass null for "whoever is holding it".
+ */
+export async function addDishFor(page: Page, dish: string, forDiner: string | null) {
+  await page.getByRole('button', { name: new RegExp(dish) }).first().click()
+  const sheet = page.getByRole('dialog')
+  if (forDiner) await sheet.getByRole('button', { name: forDiner }).click()
+  await sheet.getByRole('button', { name: /Adicionar/ }).click()
+  await sheet.waitFor({ state: 'detached' })
+}
+
 /** Switches the phone to another person at the same table. */
 export async function switchTo(page: Page, name: string, tablePath = TABLE_PATH) {
   await page.goto(tablePath)

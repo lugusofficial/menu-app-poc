@@ -14,7 +14,7 @@ import styles from './MenuPage.module.css'
 export function MenuPage() {
   const { t } = useTranslation()
   const { menu, table } = useTableContext()
-  const { addItem, cartLines, cartQuantity } = useTableSession()
+  const { session, addItem, cartLines, cartQuantity } = useTableSession()
   const toast = useToast()
 
   // The search sits in the URL so a diner can send "look at this" and the other
@@ -43,10 +43,17 @@ export function MenuPage() {
   const cartTotal = cartLines.reduce((sum, line) => sum + line.unitPriceCents * line.quantity, 0)
   const orderPath = `/t/${encodeURIComponent(menu.venue.venueSlug)}/${encodeURIComponent(table.tableId)}/order`
 
-  const add = (item: MenuItem, quantity: number, notes: string) => {
-    addItem(item, quantity, notes)
+  const add = (item: MenuItem, quantity: number, notes: string, forDinerId: string) => {
+    addItem(item, quantity, notes, forDinerId)
     setSelected(null)
-    toast.show(t('itemSheet.addedToast', { name: item.name }), { tone: 'success' })
+    const forDiner = session.diners.find((d) => d.dinerId === forDinerId)
+    // Saying who it went to is the confirmation that matters when one phone is
+    // ordering for several people.
+    const message =
+      forDiner && forDinerId !== session.currentDinerId
+        ? t('itemSheet.addedForToast', { name: item.name, diner: forDiner.name })
+        : t('itemSheet.addedToast', { name: item.name })
+    toast.show(message, { tone: 'success' })
   }
 
   return (
@@ -98,6 +105,8 @@ export function MenuPage() {
           item={selected}
           currency={currency}
           locale={locale}
+          diners={session.diners}
+          currentDinerId={session.currentDinerId}
           onAdd={add}
           onClose={() => setSelected(null)}
         />

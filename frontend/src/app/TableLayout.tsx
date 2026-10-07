@@ -1,7 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { menuApi } from '../features/menu/api'
+import { PeopleSheet } from '../features/session/components/PeopleSheet'
 import { TableSessionProvider, useTableSession } from '../features/session/TableSessionContext'
 import { DinerAvatar } from '../shared/components/DinerChip'
 import { LanguageSwitcher } from '../shared/i18n/LanguageSwitcher'
@@ -52,6 +53,7 @@ export function TableLayout() {
 function TableChrome({ context }: { context: TableContext }) {
   const { t } = useTranslation()
   const { session, currentDiner, cartQuantity } = useTableSession()
+  const [peopleOpen, setPeopleOpen] = useState(false)
   const { menu, table } = context
   const base = `/t/${encodeURIComponent(menu.venue.venueSlug)}/${encodeURIComponent(table.tableId)}`
 
@@ -78,30 +80,39 @@ function TableChrome({ context }: { context: TableContext }) {
           <LanguageSwitcher />
         </div>
 
-        {session.diners.length > 0 && (
-          <div className={styles.diners}>
+        {currentDiner && (
+          <button type="button" className={styles.diners} onClick={() => setPeopleOpen(true)}>
             <span className={styles.dinerStack}>
               {session.diners.map((diner) => (
                 <span
                   key={diner.dinerId}
                   className={`${styles.dinerSlot} ${
-                    diner.dinerId === currentDiner?.dinerId ? styles.dinerSelf : ''
+                    diner.dinerId === currentDiner.dinerId ? styles.dinerSelf : ''
                   }`}
                 >
                   <DinerAvatar name={diner.name} colorIndex={diner.colorIndex} size="sm" />
                 </span>
               ))}
+              {/* The empty slot is the affordance: a table is something you add
+                  people to, and most tables share one phone. */}
+              <span className={`${styles.dinerSlot} ${styles.addSlot}`} aria-hidden="true">
+                +
+              </span>
             </span>
             <span className={styles.dinerCount}>
-              {t('table.peopleAtTable', { count: session.diners.length })}
+              {session.diners.length === 1
+                ? t('people.addSomeone')
+                : t('table.peopleAtTable', { count: session.diners.length })}
             </span>
-          </div>
+          </button>
         )}
       </header>
 
       <main className={styles.main} id="main">
         <Outlet context={context} />
       </main>
+
+      {peopleOpen && <PeopleSheet onClose={() => setPeopleOpen(false)} />}
 
       {currentDiner && (
         <nav className={styles.tabs} aria-label={t('table.sections')}>

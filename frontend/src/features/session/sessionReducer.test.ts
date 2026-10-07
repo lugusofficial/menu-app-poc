@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import type { MenuItem } from '../menu/types'
-import { sessionReducer } from './sessionReducer'
+import { canRemoveDiner, sessionReducer } from './sessionReducer'
 import type { SessionAction } from './sessionReducer'
 import { emptySession } from './storage'
 import type { TableSession } from './types'
@@ -72,6 +72,110 @@ describe('joinDiner', () => {
   it('reuses the diner instead of creating a twin when the name is already at the table', () => {
     const state = apply(newSession(), join('d1', 'Ana'), join('d2', 'ana'))
     expect(state.diners).toHaveLength(1)
+    expect(state.currentDinerId).toBe('d1')
+  })
+})
+
+describe('addDiner', () => {
+  const addPerson = (dinerId: string, name: string): SessionAction => ({
+    type: 'addDiner',
+    dinerId,
+    name,
+    joinedAt: AT,
+  })
+
+  it('seats someone without taking over the phone', () => {
+    const state = apply(newSession(), join('d1', 'Ana'), addPerson('d2', 'Bruno'))
+    expect(state.diners.map((d) => d.name)).toEqual(['Ana', 'Bruno'])
+    expect(state.currentDinerId).toBe('d1')
+  })
+
+  it('seats a whole table one name after another', () => {
+    const state = apply(
+      newSession(),
+      join('d1', 'Ana'),
+      addPerson('d2', 'Bruno'),
+      addPerson('d3', 'Caio'),
+      addPerson('d4', 'Dani'),
+    )
+    expect(state.diners).toHaveLength(4)
+    expect(state.diners.map((d) => d.colorIndex)).toEqual([0, 1, 2, 3])
+    expect(state.currentDinerId).toBe('d1')
+  })
+
+  it('does not seat the same name twice', () => {
+    const state = apply(newSession(), join('d1', 'Ana'), addPerson('d2', 'ana'))
+    expect(state.diners).toHaveLength(1)
+  })
+
+  it('ignores an empty name', () => {
+    const state = apply(newSession(), join('d1', 'Ana'), addPerson('d2', '  '))
+    expect(state.diners).toHaveLength(1)
+  })
+})
+
+describe('removeDiner', () => {
+  const seatBoth = () =>
+    apply(newSession(), join('d1', 'Ana'), {
+      type: 'addDiner',
+      dinerId: 'd2',
+      name: 'Bruno',
+      joinedAt: AT,
+    })
+
+  it('takes someone off the table', () => {
+    const state = sessionReducer(seatBoth(), { type: 'removeDiner', dinerId: 'd2' })
+    expect(state.diners.map((d) => d.name)).toEqual(['Ana'])
+  })
+
+  it('refuses to remove the person holding the phone', () => {
+    const before = seatBoth()
+    expect(sessionReducer(before, { type: 'removeDiner', dinerId: 'd1' })).toBe(before)
+  })
+
+  it('refuses to remove someone who already ordered', () => {
+    const before = apply(seatBoth(), add('l1', 'd2'))
+    expect(canRemoveDiner(before, 'd2')).toBe(false)
+    expect(sessionReducer(before, { type: 'removeDiner', dinerId: 'd2' })).toBe(before)
+  })
+
+  it('clears what they left behind on the bill', () => {
+    const before = apply(
+      seatBoth(),
+      add('l1', 'd1'),
+      { type: 'toggleAssignment', lineId: 'l1', dinerId: 'd2' },
+      { type: 'setCustomAmount', dinerId: 'd2', cents: 5000 },
+      { type: 'togglePaid', dinerId: 'd2' },
+    )
+    const state = sessionReducer(before, { type: 'removeDiner', dinerId: 'd2' })
+    expect(state.assignments['l1']).toEqual(['d1'])
+    expect(state.customAmounts['d2']).toBeUndefined()
+    expect(state.paidDinerIds).toEqual([])
+  })
+
+  it('frees their colour for the next person', () => {
+    const removed = sessionReducer(seatBoth(), { type: 'removeDiner', dinerId: 'd2' })
+    const state = sessionReducer(removed, {
+      type: 'addDiner',
+      dinerId: 'd3',
+      name: 'Caio',
+      joinedAt: AT,
+    })
+    expect(state.diners.find((d) => d.name === 'Caio')?.colorIndex).toBe(1)
+  })
+})
+
+describe('ordering for someone else', () => {
+  it('attributes the line to the person it was ordered for', () => {
+    const state = apply(
+      newSession(),
+      join('d1', 'Ana'),
+      { type: 'addDiner', dinerId: 'd2', name: 'Bruno', joinedAt: AT },
+      add('l1', 'd2'),
+    )
+    expect(state.lines[0].addedByDinerId).toBe('d2')
+    // And the bill already knows whose it is, with no extra tapping.
+    expect(state.assignments['l1']).toEqual(['d2'])
     expect(state.currentDinerId).toBe('d1')
   })
 })
