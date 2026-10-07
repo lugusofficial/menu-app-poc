@@ -43,12 +43,18 @@ export function DinerToggle({
     <button
       type="button"
       className={`${styles.toggle} ${selected ? styles.toggleOn : ''}`}
-      style={selected ? { backgroundColor: color, borderColor: color } : { color }}
+      style={selected ? { backgroundColor: color, borderColor: color } : undefined}
       aria-pressed={selected}
       onClick={onToggle}
     >
-      <span className={styles.dot} aria-hidden="true" />
-      <span style={selected ? undefined : { color: 'var(--ink-soft)' }}>{name}</span>
+      {/* Unselected, only the dot carries the person's colour, so the name keeps
+          a readable neutral. Selected, the whole chip is their colour. */}
+      <span
+        className={styles.dot}
+        style={{ backgroundColor: selected ? 'currentColor' : color }}
+        aria-hidden="true"
+      />
+      <span>{name}</span>
     </button>
   )
 }

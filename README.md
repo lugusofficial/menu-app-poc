@@ -45,6 +45,16 @@ bill. Colour is never decoration here — it always answers "whose?", which is t
 one question the app exists to settle. Tokens live in
 `src/shared/styles/global.css`; light and dark are both first class.
 
+Dark mode is a lifted charcoal (`#15151a`), never near black: black smears on
+OLED, leaves no room to show one surface sitting above another, and makes white
+text glare. Type is a soft off white rather than `#fff`, and because the diner
+colours have to lighten to stay visible on a dark page, the text printed on them
+flips from white to near black with the theme.
+
+Both palettes are checked against WCAG: body and secondary text clear 4.5:1 on
+every surface they sit on, control borders clear 3:1, and the label on every
+diner chip clears 4.5:1 on that person's colour in both themes.
+
 The UI follows Vercel's [Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines).
 Among the things that come from it: view state lives in the URL (`?split=byItem`,
 `?q=risoto`) so a split or a filtered menu can be sent to the person across the

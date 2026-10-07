@@ -49,7 +49,7 @@
 .input {
   min-height: 48px;
   padding: 0 var(--s-3);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   border-radius: var(--r-md);
   background: var(--surface);
   color: var(--ink);
@@ -94,7 +94,7 @@
 
 .secondary {
   min-height: 44px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   border-radius: var(--r-md);
   background: transparent;
   color: var(--ink-soft);

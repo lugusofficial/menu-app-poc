@@ -199,7 +199,7 @@
   width: 100%;
   min-height: 44px;
   margin-bottom: var(--s-4);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   border-radius: var(--r-md);
   background: var(--surface);
   color: var(--ink);
@@ -258,7 +258,7 @@
   padding: 0.1rem 0.4rem;
   border-radius: var(--r-sm);
   background: var(--ok-line);
-  color: #052e16;
+  color: #052e16; /* the rule colour is the same light green in both themes */
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -307,7 +307,7 @@
 }
 
 .unpayButton {
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   background: transparent;
   color: var(--ink-soft);
 }

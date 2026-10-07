@@ -32,7 +32,19 @@
 
   --ink: var(--n-950);
   --ink-soft: var(--n-700);
-  --ink-muted: var(--n-500);
+  /* Dish descriptions are set in this, so it has to clear 4.5:1 on a card,
+     which the mid grey of the ramp does not. */
+  --ink-muted: #6b6b78;
+
+  /* Borders that are the only thing identifying a control (a field, an outline
+     button) need 3:1, which a hairline cannot give. Decorative edges keep
+     --line; anything interactive uses this. */
+  --field-border: #8e8e99;
+
+  /* Text printed on a diner's colour. Their colours are dark in this theme. */
+  --on-diner: #ffffff;
+
+  --overlay: rgba(9, 9, 11, 0.45);
 
   /* Solid near-black primary action, the way an app button reads. */
   --action: var(--n-950);
@@ -53,7 +65,7 @@
   /* The palette of people. Six hues, far apart in both hue and lightness so
      they stay distinguishable side by side and in common colour blindness. */
   --diner-0: #e11d48;
-  --diner-1: #0891b2;
+  --diner-1: #0e7490;
   --diner-2: #7c3aed;
   --diner-3: #c2410c;
   --diner-4: #047857;
@@ -93,31 +105,46 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: var(--n-950);
-    --bg-veil: rgba(9, 9, 11, 0.88);
-    --surface: #111114;
-    --surface-sunken: #17171b;
-    --line: #232329;
-    --line-strong: #32323a;
+    /*
+     * Dark, not black. Near black smears on OLED, leaves no room to show one
+     * surface sitting above another, and makes white text glare. So the page
+     * is a lifted charcoal, each surface above it is lighter still, and the
+     * type is a soft off white rather than #fff.
+     */
+    --bg: #15151a;
+    --bg-veil: rgba(21, 21, 26, 0.88);
+    --surface: #1d1d23;
+    --surface-sunken: #26262e;
+    --line: #2e2e37;
+    --line-strong: #3e3e49;
 
-    --ink: var(--n-50);
-    --ink-soft: var(--n-300);
-    --ink-muted: var(--n-500);
+    --ink: #ececf1;
+    --ink-soft: #b8b8c4;
+    --ink-muted: #9292a1;
 
-    --action: var(--n-50);
-    --action-ink: var(--n-950);
-    --action-hover: var(--n-0);
+    --field-border: #6a6a78;
+
+    --action: #ececf1;
+    --action-ink: #15151a;
+    --action-hover: #ffffff;
 
     --focus: #60a5fa;
 
+    /* Solid tints rather than translucent ones, so a notice reads the same
+       whatever surface it lands on. */
     --warn: #fcd34d;
-    --warn-bg: rgba(245, 158, 11, 0.14);
+    --warn-bg: #2a2113;
     --warn-line: #f59e0b;
-    --ok: #4ade80;
-    --ok-bg: rgba(34, 197, 94, 0.14);
+    --ok: #6ee7a0;
+    --ok-bg: #13251b;
     --ok-line: #22c55e;
     --danger: #f87171;
 
+    --overlay: rgba(0, 0, 0, 0.65);
+
+    /* The diner colours lighten here to stay visible on a dark page, which
+       flips the text printed on them from white to near black. */
+    --on-diner: #15151a;
     --diner-0: #fb7185;
     --diner-1: #22d3ee;
     --diner-2: #a78bfa;

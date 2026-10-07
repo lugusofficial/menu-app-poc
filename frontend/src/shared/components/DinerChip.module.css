@@ -4,7 +4,7 @@
   justify-content: center;
   flex: none;
   border-radius: var(--r-full);
-  color: #fff;
+  color: var(--on-diner);
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0;
@@ -34,7 +34,7 @@
   /* 36px tall, inside a 44px row, keeps the tap target honest on a phone. */
   min-height: 36px;
   padding: 0 0.75rem;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   border-radius: var(--r-full);
   background: var(--surface);
   color: var(--ink-soft);
@@ -48,24 +48,17 @@
   color: var(--ink);
 }
 
-.toggleOn {
-  color: #fff;
-  font-weight: 650;
-}
-
+.toggleOn,
 .toggleOn:hover {
-  /* Already saturated: darken by the border only, never lose the identity. */
-  color: #fff;
+  /* Their colour is dark in the light theme and light in the dark one, so the
+     label flips with it rather than being white in both. */
+  color: var(--on-diner);
+  font-weight: 650;
 }
 
 .dot {
   width: 7px;
   height: 7px;
+  flex: none;
   border-radius: var(--r-full);
-  background: currentColor;
-  opacity: 0.55;
-}
-
-.toggleOn .dot {
-  opacity: 1;
 }
